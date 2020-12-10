@@ -78,7 +78,6 @@ async function get12HourForecastForLocationKey(locationKey: string) {
 }
 
 async function getLocationFromLatLon(query: string) {
-	// ?apikey=LUt9zLnPHhKQAfDmNwavmYqvxYSbtxW4&q=51.5176228%2C-0.0557553&details=true
 	const result = await fetchJSON({
 		url: '/location-based-on-lat-lon-v2.json', // /locations/v1/cities/geoposition/search
 		params: {
