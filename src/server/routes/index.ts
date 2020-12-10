@@ -4,10 +4,10 @@ import config from 'config';
 
 import timeFormatter from 'duration-relativetimeformat';
 
-import express, { response } from 'express';
+import express, {response} from 'express';
 import currentWeatherQueries from '../db/queries/currentWeather.js';
 import locationsQueries from '../db/queries/locationsQueries.js';
-// import currentWeather from '../db/queries/currentWeather.js';
+// Import currentWeather from '../db/queries/currentWeather.js';
 /* eslint-disable new-cap */
 const router = express.Router();
 /* eslint-enable new-cap */
@@ -15,25 +15,23 @@ const router = express.Router();
 const APIKey = config.get('ACCU_WEATHER_API_KEY');
 
 const duration = timeFormatter('en', {
-	numeric: 'auto', // those are the default options
+	numeric: 'auto', // Those are the default options
 	localeMatcher: 'best fit',
 	style: 'long'
 });
 
-async function fetchJSON(data: any) {
+async function fetchJSON({url, params}: {url: string}) {
 	const queryString = new URLSearchParams({
 		apikey: APIKey,
-		...data.params
+		...params
 	});
 
-	const baseURL = `http://127.0.0.1:8080`;
-	const URLToFetch = `${baseURL}${data.url}?${queryString}`
-	console.log('Fetching: ', URLToFetch);
-	
+	const baseURL = 'http://127.0.0.1:8080';
+	const URLToFetch = `${baseURL}${url}?${queryString.toString()}`;
+	console.log('Fetching:', URLToFetch);
+
 	const response = await fetch(URLToFetch);
-	const json = await response.json();
-	
-	return json;
+	return response.json();
 }
 
 async function searchForLocation(query: string) {
@@ -50,7 +48,7 @@ async function searchForLocation(query: string) {
 			area: result.AdministrativeArea.LocalizedName,
 			country: result.Country.LocalizedName,
 			locationKey: result.Key
-		}
+		};
 	});
 
 	await locationsQueries.insertLocations(formattedResults);
@@ -59,7 +57,7 @@ async function searchForLocation(query: string) {
 }
 
 async function fetchCurrentWeather(locationKey: string) {
-	return await fetchJSON({
+	return fetchJSON({
 		url: '/current-conditions.json', // /currentconditions/v1/${locationKey}
 		params: {
 			details: true
@@ -86,7 +84,7 @@ async function getLocationFromLatLon(query: string) {
 		}
 	});
 
-	const locations = await locationsQueries.insertLocations([{
+	await locationsQueries.insertLocations([{
 		name: result.LocalizedName,
 		area: result.AdministrativeArea.LocalizedName,
 		country: result.Country.LocalizedName,
@@ -106,12 +104,11 @@ function extractLocationMetadata(location: any) {
 	};
 }
 
-
-router.get('/resolve-location', async (request, res) => {
+router.get('/resolve-location', async (request, response) => {
 	const {
 		query,
 		'query-type': queryType
-	} = request.query
+	} = request.query;
 
 	if (!query || !queryType) {
 		throw new Error('Noooo no valid form data');
@@ -123,17 +120,17 @@ router.get('/resolve-location', async (request, res) => {
 		const response = await getLocationFromLatLon(String(query));
 		results = [extractLocationMetadata(response)];
 	} else {
-		// regular search string like 'brighton'
+		// Regular search string like 'brighton'
 		const response = await searchForLocation(String(query));
 		results = response.map(extractLocationMetadata);
 	}
-	
+
 	const renderObject = {
 		messages: request.flash('messages'),
 		results
 	};
 
-	res.render('resolve-location', renderObject);
+	response.render('resolve-location', renderObject);
 });
 
 function isWeatherFresh(lastUpdatedRaw: any) {
@@ -141,14 +138,14 @@ function isWeatherFresh(lastUpdatedRaw: any) {
 	const ONE_HOUR = ONE_MINUTE * 60;
 	const lastUpdated = new Date(lastUpdatedRaw);
 	const currentTime = new Date();
-	const isFresh = (currentTime.getTime() - lastUpdated.getTime()) < ONE_HOUR;
-	return isFresh;
+	return (currentTime.getTime() - lastUpdated.getTime()) < ONE_HOUR;
 }
 
-function removeQueryStringFromURL({request, queryStringParams = []}) {
+function removeQueryStringFromURL({request, queryStringParams: queryStringParameters = []}) {
 	const requestURL = constructValidURLFromRequest(request);
-	for (const queryStringParam of queryStringParams) {
-		requestURL.searchParams.delete(queryStringParam);
+
+	for (const queryStringParameter of queryStringParameters) {
+		requestURL.searchParams.delete(queryStringParameter);
 	}
 
 	return requestURL.search;
@@ -183,9 +180,11 @@ function generateTimeOptions(currentTime) {
 		copiedTime.setSeconds(0);
 		copiedTime.setMilliseconds(0);
 
-		const paddedHours = String(copiedTime.getHours()).padStart(2, '0');
-		const paddedMinutes = String(copiedTime.getMinutes()).padStart(2, '0');
-		const label = `${paddedHours}:${paddedMinutes}`;
+		const label = new Intl.DateTimeFormat('default', {
+			hour: 'numeric',
+			minute: 'numeric',
+			dayPeriod: 'short'
+		}).format(copiedTime);
 
 		results.push({
 			value: copiedTime.getTime(),
@@ -218,7 +217,7 @@ router.get('/', async (request, res) => {
 
 	const isSelectedTimeDefined = Object.prototype.hasOwnProperty.call(request.query, 'selected-time');
 
-	let selectedTime = normaliseTime(request.query['selected-time']);
+	let selectedTime: string | number = normaliseTime(request.query['selected-time']);
 
 	if (isSelectedTimeDefined) {
 		if (request.query['selected-time'] !== selectedTime) {
@@ -241,9 +240,9 @@ router.get('/', async (request, res) => {
 
 		if (shouldUpdateCurrentWeather) {
 			console.log('Weather is stale, fetching new...');
-			// const forecast = await get12HourForecastForLocationKey(String(locationKey));
+			// Const forecast = await get12HourForecastForLocationKey(String(locationKey));
 			const currentWeatherRaw = await fetchCurrentWeather(String(locationKey));
-			
+
 			currentWeather = await currentWeatherQueries.insertOrUpdateCurrentWeather({
 				locationKey,
 				weather: currentWeatherRaw
@@ -265,7 +264,7 @@ router.get('/', async (request, res) => {
 
 	let forceWeatherUpdateLink;
 
-	let dataLastUpdated = {};
+	const dataLastUpdated = {};
 
 	if (currentWeather) {
 		dataLastUpdated.rawTime = currentWeather.updatedAt;
