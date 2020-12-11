@@ -4,7 +4,7 @@ import config from 'config';
 
 import timeFormatter from 'duration-relativetimeformat';
 
-import express, {response} from 'express';
+import express from 'express';
 import weatherQueries from '../db/queries/weather.js';
 import locationsQueries from '../db/queries/locationsQueries.js';
 // Import currentWeather from '../db/queries/currentWeather.js';
@@ -212,6 +212,18 @@ function generateFutureTimeOptions() {
 	return results;
 }
 
+function findForecastedWeather({
+	forecasts,
+	selectedTime
+}: {
+	forecasts: [],
+	selectedTime: number
+}) {
+	return forecasts.find(({time}) => {
+		return selectedTime === Date.parse(time);
+	});
+}
+
 router.get('/', async (request, res) => {
 	const locationID = request.query['location'] ? String(request.query['location']) : '';
 	const locationInfo = await locationsQueries.getLocation(locationID);
@@ -240,21 +252,31 @@ router.get('/', async (request, res) => {
 
 	const forceReload = request.query['force-reload'];
 
-	let currentWeather;
+	let weather;
+	let weatherUpdatedAt;
+
 	if (locationID) {
-		currentWeather = await weatherQueries.getWeatherForLocation(locationID);
+		const fullWeatherInfo = await weatherQueries.getWeatherForLocation(locationID);
+		weatherUpdatedAt = fullWeatherInfo?.updatedAt;
+
+		if (selectedTime) {
+			weather = findForecastedWeather({
+				forecasts: fullWeatherInfo?.forecast,
+				selectedTime
+			});
+		} else {
+			weather = fullWeatherInfo?.current;
+		}
 		
-		const shouldUpdateCurrentWeather = forceReload || !currentWeather || !isWeatherFresh(currentWeather.updatedAt);
+		const shouldUpdateCurrentWeather = forceReload || !weather || !isWeatherFresh(weatherUpdatedAt);
 
 		if (shouldUpdateCurrentWeather) {
 			console.log('Weather is stale, fetching new...');
-			// Const forecast = await get12HourForecastForLocationID(String(locationID));
-			currentWeather = await fetchAndSaveCurrentWeather(String(locationID));
+			weather = await fetchAndSaveCurrentWeather(String(locationID));
 
 			if (forceReload) {
 				// Remove the force-reload query string from the URL
 				// otherwise every page load will force a reload!
-
 				const redirectURL = removeQueryStringFromURL({
 					request,
 					queryStringParams: ['force-reload']
@@ -274,10 +296,10 @@ router.get('/', async (request, res) => {
 
 	const dataLastUpdated = {} as DataLastUpdated;
 
-	if (currentWeather) {
-		const lastUpdatedAt = new Date(currentWeather.updatedAt);
+	if (weather) {
+		const lastUpdatedAt = new Date(weatherUpdatedAt);
 
-		dataLastUpdated.rawTime = currentWeather.updatedAt;
+		dataLastUpdated.rawTime = weatherUpdatedAt;
 		dataLastUpdated.friendlyTime = duration(lastUpdatedAt);
 
 		forceWeatherUpdateLink = addQueryStringToURL({
@@ -314,11 +336,11 @@ router.get('/', async (request, res) => {
 	};
 
 	const timeOptions = [nowTimeOption, ...futureTimeOptions];
-
+	
 	const renderObject = {
 		messages: request.flash('messages'),
 		isHome: true,
-		currentWeather,
+		weather,
 		dataLastUpdated,
 		forceWeatherUpdateLink,
 		timeOptions,
