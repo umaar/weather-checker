@@ -12,7 +12,7 @@ import locationsQueries from '../db/queries/locationsQueries.js';
 const router = express.Router();
 /* eslint-enable new-cap */
 
-const APIKey = config.get('ACCU_WEATHER_API_KEY');
+const APIKey: string = config.get('ACCU_WEATHER_API_KEY');
 
 const duration = timeFormatter('en', {
 	numeric: 'auto', // Those are the default options
@@ -20,7 +20,13 @@ const duration = timeFormatter('en', {
 	style: 'long'
 });
 
-async function fetchJSON({url, params}: {url: string}) {
+async function fetchJSON({
+	url,
+	params
+}: {
+	url: string,
+	params: {[index: string]: string}
+}) {
 	const queryString = new URLSearchParams({
 		apikey: APIKey,
 		...params
@@ -60,7 +66,7 @@ async function fetchCurrentWeather(locationKey: string) {
 	return fetchJSON({
 		url: '/current-conditions.json', // /currentconditions/v1/${locationKey}
 		params: {
-			details: true
+			details: String(true)
 		}
 	});
 }
@@ -69,8 +75,8 @@ async function get12HourForecastForLocationKey(locationKey: string) {
 	return fetchJSON({
 		url: '/forecast-12-hours.json', // /forecasts/v1/hourly/12hour/${locationKey}
 		params: {
-			details: true,
-			metric: true
+			details: String(true),
+			metric: String(true)
 		}
 	});
 }
@@ -80,7 +86,7 @@ async function getLocationFromLatLon(query: string) {
 		url: '/location-based-on-lat-lon-v2.json', // /locations/v1/cities/geoposition/search
 		params: {
 			q: query,
-			details: true
+			details: String(true)
 		}
 	});
 
@@ -141,7 +147,13 @@ function isWeatherFresh(lastUpdatedRaw: any) {
 	return (currentTime.getTime() - lastUpdated.getTime()) < ONE_HOUR;
 }
 
-function removeQueryStringFromURL({request, queryStringParams: queryStringParameters = []}) {
+function removeQueryStringFromURL({
+	request,
+	queryStringParams: queryStringParameters
+}: {
+	request: express.Request,
+	queryStringParams: string[]
+}) {
 	const requestURL = constructValidURLFromRequest(request);
 
 	for (const queryStringParameter of queryStringParameters) {
@@ -151,13 +163,23 @@ function removeQueryStringFromURL({request, queryStringParams: queryStringParame
 	return requestURL.search;
 }
 
-function constructValidURLFromRequest(request) {
+function constructValidURLFromRequest(request: express.Request) {
 	const baseURL = `${request.protocol}://${request.get('host')}`;
 	const requestURL = new URL(request.url, baseURL);
 	return requestURL;
 }
 
-function addQueryStringToURL({request, queryStringParams}) {
+type URLQueryStringParams = {
+	[index: string]: string;
+}
+
+function addQueryStringToURL(
+	{request, queryStringParams}:
+	{
+		request: express.Request;
+		queryStringParams: URLQueryStringParams;
+	}
+) {
 	const requestURL = constructValidURLFromRequest(request);
 	for (const queryString of Object.entries(queryStringParams)) {
 		requestURL.searchParams.set(...queryString);
@@ -166,7 +188,8 @@ function addQueryStringToURL({request, queryStringParams}) {
 	return requestURL.search;
 }
 
-function generateTimeOptions(currentTime) {
+function generateFutureTimeOptions() {
+	const currentTime = new Date();
 	const results = [];
 	// Even they offer a 12 hour forecast, we only display...
 	// ...11 hours since the 11th hour must display a...
@@ -195,40 +218,23 @@ function generateTimeOptions(currentTime) {
 	return results;
 }
 
-function normaliseTime(time = 'now') {
-	time = time || 'now';
 
-	if (time === 'now') {
-		return 'now';
-	}
-
-	const currentTime = Date.now();
-
-	if (currentTime >= new Date(Number.parseInt(time, 10)).getTime()) {
-		console.log('Old time provided, defaulting to `now`');
-		return 'now';
-	}
-
-	return time;
-}
 
 router.get('/', async (request, res) => {
 	const locationKey = request.query['location-key'] ? String(request.query['location-key']) : undefined;
 
-	const isSelectedTimeDefined = Object.prototype.hasOwnProperty.call(request.query, 'selected-time');
+	const parsedSelectedTime = Number.parseInt(String(request.query['selected-time']), 10);
+	const selectedTime = Number.isNaN(parsedSelectedTime) ? null : parsedSelectedTime;
 
-	let selectedTime: string | number = normaliseTime(request.query['selected-time']);
+	const currentTime = Date.now();
 
-	if (isSelectedTimeDefined) {
-		if (request.query['selected-time'] !== selectedTime) {
-			// Mismatch in the query string, so reset to be same
-			const redirectURL = removeQueryStringFromURL({
-				request,
-				queryStringParams: ['selected-time']
-			});
-			console.log('redirecting to:', redirectURL);
-			return res.redirect(redirectURL);
-		}
+	if (selectedTime && currentTime >= new Date(selectedTime).getTime()) {
+		const redirectURL = removeQueryStringFromURL({
+			request,
+			queryStringParams: ['selected-time']
+		});
+		console.log('redirecting to:', redirectURL);
+		return res.redirect(redirectURL);
 	}
 
 	const forceReload = request.query['force-reload'];
@@ -264,47 +270,53 @@ router.get('/', async (request, res) => {
 
 	let forceWeatherUpdateLink;
 
-	const dataLastUpdated = {};
+	type DataLastUpdated = {
+		rawTime: number;
+		friendlyTime: string;
+	};
+
+	const dataLastUpdated = {} as DataLastUpdated;
 
 	if (currentWeather) {
-		dataLastUpdated.rawTime = currentWeather.updatedAt;
 		const lastUpdatedAt = new Date(currentWeather.updatedAt);
+
+		dataLastUpdated.rawTime = currentWeather.updatedAt;
 		dataLastUpdated.friendlyTime = duration(lastUpdatedAt);
 
 		forceWeatherUpdateLink = addQueryStringToURL({
 			request,
 			queryStringParams: {
-				'force-reload': true
+				'force-reload': String(true)
 			}
 		});
 	}
 
-	const timeOptions = [{
-		label: 'Now',
-		value: 'now'
-	}, ...generateTimeOptions(new Date())].map(timeOption => {
+	const futureTimeOptions = generateFutureTimeOptions().map(timeOption => {
 		const timeOptionURL = addQueryStringToURL({
 			request,
 			queryStringParams: {
-				'selected-time': timeOption.value
+				'selected-time': String(timeOption.value)
 			}
 		});
 
 		return {
+			...timeOption,
 			url: timeOptionURL,
-			...timeOption
+			selected: timeOption.value === selectedTime
 		};
-	}).map(timeOption => {
-		if (selectedTime !== 'now') {
-			selectedTime = Number.parseInt(selectedTime, 10);
-		}
-
-		if (timeOption.value === selectedTime) {
-			timeOption.selected = true;
-		}
-
-		return timeOption;
 	});
+
+	const nowTimeOption = {
+		label: 'Now',
+		value: 'now',
+		url: removeQueryStringFromURL({
+			request,
+			queryStringParams: ['selected-time']
+		}),
+		selected: !selectedTime
+	};
+
+	const timeOptions = [nowTimeOption, ...futureTimeOptions];
 
 	const renderObject = {
 		messages: request.flash('messages'),
