@@ -1,0 +1,12 @@
+
+<ol>
+	{% for location in results %}
+		<li>
+			<a href="/?location={{location.id}}">
+				{{location.name}}
+			</a>
+
+			<span>- {{location.area}}, {{location.country}}</span>
+		</li>
+	{% endfor %}
+</ol>

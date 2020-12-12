@@ -7,18 +7,13 @@ import timeFormatter from 'duration-relativetimeformat';
 import express from 'express';
 import weatherQueries from '../db/queries/weather.js';
 import locationsQueries from '../db/queries/locationsQueries.js';
-// Import currentWeather from '../db/queries/currentWeather.js';
 /* eslint-disable new-cap */
 const router = express.Router();
 /* eslint-enable new-cap */
 
 const APIKey: string = config.get('ACCU_WEATHER_API_KEY');
 
-const duration = timeFormatter('en', {
-	numeric: 'auto', // Those are the default options
-	localeMatcher: 'best fit',
-	style: 'long'
-});
+const duration = timeFormatter('en');
 
 async function fetchJSON({
 	url,
@@ -137,9 +132,10 @@ router.get('/resolve-location', async (request, response) => {
 function isWeatherFresh(lastUpdatedRaw: any) {
 	const ONE_MINUTE = 1000 * 60;
 	const ONE_HOUR = ONE_MINUTE * 60;
+	const THREE_HOURS = ONE_HOUR * 3;
 	const lastUpdated = new Date(lastUpdatedRaw);
 	const currentTime = new Date();
-	return (currentTime.getTime() - lastUpdated.getTime()) < ONE_HOUR;
+	return (currentTime.getTime() - lastUpdated.getTime()) < THREE_HOURS;
 }
 
 function removeQueryStringFromURL({
@@ -224,6 +220,148 @@ function findForecastedWeather({
 	});
 }
 
+const clothesIdentifiers = Object.freeze({
+	"cap": "Cap",
+	"shoe-covers": "Shoe covers",
+	"winter-gloves": "Winter gloves" ,
+	"jacket": "Jacket",
+	"thick-long-sleeved-jersey": "Thick long sleeved jersey",
+	"long-sleeve-base-layer": "Long sleeve base layer",
+	"bib-tights": "Bib tights",
+	"bib-shorts-leg-warmers": "Bib shorts + leg warmers",
+	"thin-long-sleeved-jersey": "Thin long sleeved jersey",
+	"mid-weight-gloves": "Mid weight gloves",
+	"base-layer": "Base layer",
+	"bib-shorts": "Bib shorts",
+	"thin-gloves": "Thin gloves",
+	"thick-short-sleeved-jersey": "Thick short sleeved jersey",
+	"thin-short-sleeved-jersey": "Thin short sleeved jersey"
+});
+
+interface Temperatures {
+	from: number;
+	to: number;
+}
+
+interface ClothesTemperatureRange {
+	temperatures: Temperatures;
+	clothesIDs: Array<keyof typeof clothesIdentifiers>;
+};
+
+const clothesMapping: ClothesTemperatureRange[] = [{
+	temperatures: {
+		from: 19,
+		to: Infinity
+	},
+	clothesIDs: [
+		"bib-shorts",
+		"thin-short-sleeved-jersey"
+	]
+}, {
+	temperatures: {
+		from: 17,
+		to: 18
+	},
+	clothesIDs: [
+		"bib-shorts",
+		"thick-short-sleeved-jersey"
+	]
+}, {
+	temperatures: {
+		from: 15,
+		to: 16
+	},
+	clothesIDs: [
+		"bib-shorts",
+		"thick-short-sleeved-jersey"
+	]
+}, {
+	temperatures: {
+		from: 13,
+		to: 14
+	},
+	clothesIDs: [
+		"bib-shorts",
+		"thick-long-sleeved-jersey",
+		"thin-gloves"
+	]
+}, {
+	temperatures: {
+		from: 10,
+		to: 12
+	},
+	clothesIDs: [
+		"bib-shorts",
+		"base-layer",
+		"thin-long-sleeved-jersey",
+		"mid-weight-gloves"
+	]
+}, {
+	temperatures: {
+		from: 8,
+		to: 9
+	},
+	clothesIDs: [
+		"bib-shorts-leg-warmers",
+		"base-layer",
+		"thick-long-sleeved-jersey",
+		"mid-weight-gloves"
+	]
+}, {
+	temperatures: {
+		from: 6,
+		to: 7
+	},
+	clothesIDs: [
+		"bib-tights",
+		"long-sleeve-base-layer",
+		"thick-long-sleeved-jersey",
+		"winter-gloves"
+	]
+}, {
+	temperatures: {
+		from: 4,
+		to: 5
+	},
+	clothesIDs: [
+		"bib-tights",
+		"long-sleeve-base-layer",
+		"thick-long-sleeved-jersey",
+		"winter-gloves",
+		"cap"
+	]
+}, {
+	temperatures: {
+		from: 3,
+		to: -Infinity
+	},
+	clothesIDs: [
+		"bib-tights",
+		"long-sleeve-base-layer",
+		"thick-long-sleeved-jersey",
+		"jacket",
+		"winter-gloves",
+		"shoe-covers",
+		"cap"
+	]
+}];
+
+function calculateClothes(currentTemperature: number) {
+	currentTemperature = Math.round(currentTemperature);
+
+	const rangeSelection = clothesMapping.find(({temperatures}) => {
+		const isInRange =
+			currentTemperature >= temperatures.from 
+			&& currentTemperature <= temperatures.to;
+		
+		return isInRange;
+	});
+	
+	return rangeSelection?.clothesIDs.map(clothesID => {
+		return [clothesID, clothesIdentifiers[clothesID]]
+	});
+}
+
 router.get('/', async (request, res) => {
 	const locationID = request.query['location'] ? String(request.query['location']) : '';
 	const locationInfo = await locationsQueries.getLocation(locationID);
@@ -254,11 +392,12 @@ router.get('/', async (request, res) => {
 
 	let weather;
 	let weatherUpdatedAt;
+	let fullWeatherInfo;
 
 	if (locationID) {
-		const fullWeatherInfo = await weatherQueries.getWeatherForLocation(locationID);
+		fullWeatherInfo = await weatherQueries.getWeatherForLocation(locationID);
 		weatherUpdatedAt = fullWeatherInfo?.updatedAt;
-
+		
 		if (selectedTime) {
 			weather = findForecastedWeather({
 				forecasts: fullWeatherInfo?.forecast,
@@ -272,7 +411,9 @@ router.get('/', async (request, res) => {
 
 		if (shouldUpdateCurrentWeather) {
 			console.log('Weather is stale, fetching new...');
-			weather = await fetchAndSaveCurrentWeather(String(locationID));
+			fullWeatherInfo = await fetchAndSaveCurrentWeather(String(locationID));
+			weather = fullWeatherInfo?.current;
+			weatherUpdatedAt = fullWeatherInfo?.updatedAt;
 
 			if (forceReload) {
 				// Remove the force-reload query string from the URL
@@ -297,7 +438,7 @@ router.get('/', async (request, res) => {
 	const dataLastUpdated = {} as DataLastUpdated;
 
 	if (weather) {
-		const lastUpdatedAt = new Date(weatherUpdatedAt);
+		const lastUpdatedAt = new Date(Date.parse(weatherUpdatedAt));
 
 		dataLastUpdated.rawTime = weatherUpdatedAt;
 		dataLastUpdated.friendlyTime = duration(lastUpdatedAt);
@@ -308,6 +449,35 @@ router.get('/', async (request, res) => {
 				'force-reload': String(true)
 			}
 		});
+
+		let rainInfoText = 'No rain for at least 60 min';
+		let nextHourWeather;
+
+		if (selectedTime) {
+			const selectedForecastIndex = fullWeatherInfo?.forecast.findIndex(({time}) => {
+				return time === weather.time;
+			});
+
+			nextHourWeather = fullWeatherInfo?.forecast[selectedForecastIndex + 1];
+		} else {
+			// weather = fullWeatherInfo?.current;
+			const copiedTime = new Date();
+			copiedTime.setHours(copiedTime.getHours() + 1);
+			copiedTime.setMinutes(0);
+			copiedTime.setSeconds(0);
+			copiedTime.setMilliseconds(0);
+
+			nextHourWeather = findForecastedWeather({
+				forecasts: fullWeatherInfo?.forecast,
+				selectedTime: copiedTime.getTime()
+			});
+		}
+
+		if (weather.hasRain || nextHourWeather?.hasRain) {
+			rainInfoText = 'Rain within 60 min';
+		}
+
+		weather.rainInfoText = rainInfoText;
 	}
 
 	const futureTimeOptions = generateFutureTimeOptions().map(timeOption => {
@@ -335,6 +505,8 @@ router.get('/', async (request, res) => {
 		selected: !selectedTime
 	};
 
+	const clothes = calculateClothes(weather?.temperature);
+	
 	const timeOptions = [nowTimeOption, ...futureTimeOptions];
 	
 	const renderObject = {
@@ -344,7 +516,8 @@ router.get('/', async (request, res) => {
 		dataLastUpdated,
 		forceWeatherUpdateLink,
 		timeOptions,
-		locationInfo
+		locationInfo,
+		clothes
 	};
 
 	res.render('index', renderObject);

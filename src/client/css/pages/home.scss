@@ -1,0 +1,116 @@
+h1 {
+	
+}
+
+button[type="submit"] {
+    padding: 5px;
+    margin-top: 10px;
+}
+
+fieldset {
+    margin-top: 15px;
+    border-style: solid;
+    border-color: #efefef;
+}
+
+body {
+	color: white;
+	font-family: 'Roboto', sans-serif;
+}
+
+a {
+	color: white;
+}
+
+header summary {
+    font-weight: bold;
+    cursor: pointer;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 10px;
+    border-bottom: 1px solid white;;
+}
+
+.container {
+	background: radial-gradient(circle, rgba(37,132,198,1) 39%, rgba(51,165,224,1) 81%);
+
+	outline: 1px solid pink;
+    height: 94vh;
+    padding: 20px;
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    max-width: 375px;
+    width: 100%;
+}
+
+.weather-extra {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.6);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    img {
+        margin-left: -14px;
+    }
+}
+
+.weather-extra-temperature {
+    display: flex;
+    flex-direction: column;
+    font-weight: bold;
+}
+
+.weather-extra-temperature--regular {
+    font-size: 38px;
+}
+
+.weather-extra-temperature--real-feel {
+    font-size: 14px;
+}
+
+.weather-metadata {
+}
+
+.weather-metadata p {
+    margin: 5px;
+    font-size: 13px;
+}
+
+.refresh-message {
+    font-size: 13px;
+    text-align: center;;
+    font-style: italic;
+
+    a {
+        text-decoration: none;
+        color: #298ece;
+        background: white;
+        padding: 2px;
+        border-radius: 3px;
+        margin-left: 2px;
+    }
+}
+
+.clothes-container {
+    display: flex;
+}
+
+.clothes-list {
+    width: 50%;
+    li {
+        display: flex;
+
+        img {
+            height: auto;
+            max-width: 60px;
+        }
+    }
+}
