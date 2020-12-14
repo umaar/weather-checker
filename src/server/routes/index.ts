@@ -349,7 +349,7 @@ const clothesMapping: ClothesTemperatureRange[] = [{
 function calculateClothes(currentTemperature: number) {
 	currentTemperature = Math.round(currentTemperature);
 
-	const rangeSelection = clothesMapping.find(({temperatures}) => {
+	const {clothesIDs, temperatures} = clothesMapping.find(({temperatures}) => {
 		const isInRange =
 			currentTemperature >= temperatures.from 
 			&& currentTemperature <= temperatures.to;
@@ -357,9 +357,14 @@ function calculateClothes(currentTemperature: number) {
 		return isInRange;
 	});
 	
-	return rangeSelection?.clothesIDs.map(clothesID => {
+	const individualItems = clothesIDs.map(clothesID => {
 		return [clothesID, clothesIdentifiers[clothesID]]
 	});
+
+	return {
+		individualItems,
+		mainImage: `outfit-${temperatures.from}-${temperatures.to}.png`
+	}
 }
 
 router.get('/', async (request, res) => {
@@ -393,6 +398,7 @@ router.get('/', async (request, res) => {
 	let weather;
 	let weatherUpdatedAt;
 	let fullWeatherInfo;
+	let clothes;
 
 	if (locationID) {
 		fullWeatherInfo = await weatherQueries.getWeatherForLocation(locationID);
@@ -477,6 +483,7 @@ router.get('/', async (request, res) => {
 			rainInfoText = 'Rain within 60 min';
 		}
 
+		clothes = calculateClothes(weather?.temperature);
 		weather.rainInfoText = rainInfoText;
 	}
 
@@ -505,7 +512,7 @@ router.get('/', async (request, res) => {
 		selected: !selectedTime
 	};
 
-	const clothes = calculateClothes(weather?.temperature);
+	
 	
 	const timeOptions = [nowTimeOption, ...futureTimeOptions];
 	
