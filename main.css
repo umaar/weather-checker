@@ -1,0 +1,84 @@
+body {
+	margin: 0;
+	padding: 0;
+	font-family: 'Roboto', sans-serif;
+
+	color: rgb(112, 110, 111);
+  }
+
+  ul {
+	  list-style-type: none;;
+	  padding: 0;
+  }
+
+  p {
+	padding: 0;
+	margin: 0;
+  }
+
+  .container {
+	  outline: 1px solid pink;
+	height: 94vh;
+	  padding: 10px;
+	margin: 10px;
+	display: flex;
+	flex-direction: column;
+	max-width: 375px;
+	width: 100%;
+  }
+  
+  header {
+	  padding: 10px;
+	  text-align: center;
+	  text-transform: uppercase;
+  }
+  .overview {
+	border-top: 2px solid rgb(112, 110, 111);
+	border-bottom: 2px solid rgb(112, 110, 111);
+	padding: 10px 0;
+	align-items: center;	;
+  }
+  .overview-primary {
+	  display: flex;
+  }
+
+  .overview-secondary p {
+	  font-size: 15px;
+  }
+
+  .temperature {
+	font-size: 35px;
+	letter-spacing: -1px;
+    font-weight: bold;
+  }
+
+  .overview-primary img {
+	object-fit: contain;
+  }
+
+  .overview {
+	  display: flex;
+	  justify-content: space-between;
+	/* height: clamp(82px, 10vh, 200px); */
+  }
+  
+  .clothes-details {
+	
+  }
+  
+  .clothes-picture {
+	flex-grow: 1;
+	flex: 1;
+	display: flex;
+	/* flex: 1 1 auto; */
+  }
+  
+.clothes-details + img {
+	  /* height: 100%; */
+	  /* margin: auto; */
+	  flex: 1;
+	  margin-top: 20px;
+
+	  /* idea from https://stackoverflow.com/a/51974985 */
+	  min-height: 0;
+  }
