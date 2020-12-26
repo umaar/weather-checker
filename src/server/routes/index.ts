@@ -15,6 +15,19 @@ const APIKey: string = config.get('ACCU_WEATHER_API_KEY');
 
 const duration = timeFormatter('en');
 
+export function wrapHandler(asyncFn: Function) {
+	const exceptionHandled = async (req: express.Request, res: express.Response, next?: express.NextFunction) => {
+	  try {
+		return await asyncFn(req, res, next);
+	  } catch (error) {
+		return next!(error);
+	  }
+	};
+  
+	return exceptionHandled;
+}
+
+
 async function fetchJSON({
 	url,
 	params
@@ -102,7 +115,7 @@ async function getLocationFromLatLon(query: string) {
 	}]);
 }
 
-router.get('/resolve-location', async (request, response) => {
+async function resolveLocation(request: express.Request, response: express.Response) {
 	const {
 		query,
 		'query-type': queryType
@@ -127,7 +140,9 @@ router.get('/resolve-location', async (request, response) => {
 	};
 
 	response.render('resolve-location', renderObject);
-});
+}
+
+router.get('/resolve-location', wrapHandler(resolveLocation));
 
 function isWeatherFresh(lastUpdatedRaw: any) {
 	const ONE_MINUTE = 1000 * 60;
@@ -370,7 +385,7 @@ function calculateClothes(currentTemperature: number) {
 	}
 }
 
-router.get('/', async (request, res) => {
+async function homePage(request: express.Request, res: express.Response) {
 	const locationID = request.query['location'] ? String(request.query['location']) : '';
 	const locationInfo = await locationsQueries.getLocation(locationID);
 	
@@ -531,6 +546,8 @@ router.get('/', async (request, res) => {
 	};
 
 	res.render('index', renderObject);
-});
+}
+
+router.get('/', wrapHandler(homePage));
 
 export default router;
