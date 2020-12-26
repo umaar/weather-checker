@@ -30,3 +30,4 @@ config/*.json
 notes/envato
 readme.md 
 example-responses/*
+design/*

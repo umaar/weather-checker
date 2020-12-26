@@ -19,8 +19,8 @@ async function fetchJSON({
 	url,
 	params
 }: {
-	url: string,
-	params: {[index: string]: string}
+	url: string;
+	params: {[index: string]: string};
 }) {
 	const queryString = new URLSearchParams({
 		apikey: APIKey,
@@ -221,21 +221,21 @@ function findForecastedWeather({
 }
 
 const clothesIdentifiers = Object.freeze({
-	"cap": "Cap",
-	"shoe-covers": "Shoe covers",
-	"winter-gloves": "Winter gloves" ,
-	"jacket": "Jacket",
-	"thick-long-sleeved-jersey": "Thick long sleeved jersey",
-	"long-sleeve-base-layer": "Long sleeve base layer",
-	"bib-tights": "Bib tights",
-	"bib-shorts-leg-warmers": "Bib shorts + leg warmers",
-	"thin-long-sleeved-jersey": "Thin long sleeved jersey",
-	"mid-weight-gloves": "Mid weight gloves",
-	"base-layer": "Base layer",
-	"bib-shorts": "Bib shorts",
-	"thin-gloves": "Thin gloves",
-	"thick-short-sleeved-jersey": "Thick short sleeved jersey",
-	"thin-short-sleeved-jersey": "Thin short sleeved jersey"
+	'cap': 'Cap',
+	'shoe-covers': 'Shoe covers',
+	'winter-gloves': 'Winter gloves',
+	'jacket': 'Jacket',
+	'thick-long-sleeved-jersey': 'Thick long sleeved jersey',
+	'long-sleeve-base-layer': 'Long sleeve base layer',
+	'bib-tights': 'Bib tights',
+	'bib-shorts-leg-warmers': 'Bib shorts + leg warmers',
+	'thin-long-sleeved-jersey': 'Thin long sleeved jersey',
+	'mid-weight-gloves': 'Mid weight gloves',
+	'base-layer': 'Base layer',
+	'bib-shorts': 'Bib shorts',
+	'thin-gloves': 'Thin gloves',
+	'thick-short-sleeved-jersey': 'Thick short sleeved jersey',
+	'thin-short-sleeved-jersey': 'Thin short sleeved jersey'
 });
 
 interface Temperatures {
@@ -349,7 +349,10 @@ const clothesMapping: ClothesTemperatureRange[] = [{
 function calculateClothes(currentTemperature: number) {
 	currentTemperature = Math.round(currentTemperature);
 
-	const {clothesIDs, temperatures} = clothesMapping.find(({temperatures}) => {
+	const {
+		clothesIDs,
+		temperatures
+	}: any = clothesMapping.find(({temperatures}) => {
 		const isInRange =
 			currentTemperature >= temperatures.from 
 			&& currentTemperature <= temperatures.to;
@@ -357,8 +360,8 @@ function calculateClothes(currentTemperature: number) {
 		return isInRange;
 	});
 	
-	const individualItems = clothesIDs.map(clothesID => {
-		return [clothesID, clothesIdentifiers[clothesID]]
+	const individualItems = clothesIDs.map((clothesID: any) => {
+		return [clothesID, (clothesIdentifiers as any)[clothesID]]
 	});
 
 	return {
@@ -395,7 +398,7 @@ router.get('/', async (request, res) => {
 
 	const forceReload = request.query['force-reload'];
 
-	let weather;
+	let weather: any;
 	let weatherUpdatedAt;
 	let fullWeatherInfo;
 	let clothes;
@@ -460,7 +463,7 @@ router.get('/', async (request, res) => {
 		let nextHourWeather;
 
 		if (selectedTime) {
-			const selectedForecastIndex = fullWeatherInfo?.forecast.findIndex(({time}) => {
+			const selectedForecastIndex = fullWeatherInfo?.forecast.findIndex(({time}: {time: string}) => {
 				return time === weather.time;
 			});
 
