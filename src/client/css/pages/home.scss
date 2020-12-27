@@ -13,11 +13,6 @@ fieldset {
     border-color: #efefef;
 }
 
-body {
-	color: white;
-	font-family: 'Roboto', sans-serif;
-}
-
 a {
 	color: white;
 }
@@ -35,8 +30,7 @@ header {
 }
 
 .container {
-	background: radial-gradient(circle, rgba(37,132,198,1) 39%, rgba(51,165,224,1) 81%);
-
+    background: linear-gradient(#36A9E1, #2581C4);
 	outline: 1px solid pink;
     height: 94vh;
     padding: 20px;

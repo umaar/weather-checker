@@ -4,6 +4,7 @@ $container-width: 1280px;
 $primary-green: #27c188;
 
 @import 'base/base';
+@import 'base/fonts';
 @import 'components/component';
 @import 'pages/home';
 @import 'pages/resolve-location';
