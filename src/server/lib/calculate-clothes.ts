@@ -1,5 +1,6 @@
 const clothesIdentifiers = Object.freeze({
 	'cap': 'Cap',
+	'hat': 'Hap',
 	'shoe-covers': 'Shoe covers',
 	'winter-gloves': 'Winter gloves',
 	'jacket': 'Jacket',
@@ -9,11 +10,10 @@ const clothesIdentifiers = Object.freeze({
 	'bib-shorts-leg-warmers': 'Bib shorts + leg warmers',
 	'thin-long-sleeved-jersey': 'Thin long sleeved jersey',
 	'mid-weight-gloves': 'Mid weight gloves',
-	'base-layer': 'Base layer',
 	'bib-shorts': 'Bib shorts',
-	'thin-gloves': 'Thin gloves',
 	'thick-short-sleeved-jersey': 'Thick short sleeved jersey',
-	'thin-short-sleeved-jersey': 'Thin short sleeved jersey'
+	'thin-short-sleeved-jersey': 'Thin short sleeved jersey',
+	'short-sleeved-base-layer': 'Short sleeve base layer'
 });
 
 interface Temperatures {
@@ -28,21 +28,12 @@ interface ClothesTemperatureRange {
 
 const clothesMapping: ClothesTemperatureRange[] = [{
 	temperatures: {
-		from: 19,
+		from: 17,
 		to: Infinity
 	},
 	clothesIDs: [
 		"bib-shorts",
 		"thin-short-sleeved-jersey"
-	]
-}, {
-	temperatures: {
-		from: 17,
-		to: 18
-	},
-	clothesIDs: [
-		"bib-shorts",
-		"thick-short-sleeved-jersey"
 	]
 }, {
 	temperatures: {
@@ -60,8 +51,7 @@ const clothesMapping: ClothesTemperatureRange[] = [{
 	},
 	clothesIDs: [
 		"bib-shorts",
-		"thick-long-sleeved-jersey",
-		"thin-gloves"
+		"thin-long-sleeved-jersey"
 	]
 }, {
 	temperatures: {
@@ -69,8 +59,8 @@ const clothesMapping: ClothesTemperatureRange[] = [{
 		to: 12
 	},
 	clothesIDs: [
+		"short-sleeved-base-layer",
 		"bib-shorts",
-		"base-layer",
 		"thin-long-sleeved-jersey",
 		"mid-weight-gloves"
 	]
@@ -80,8 +70,8 @@ const clothesMapping: ClothesTemperatureRange[] = [{
 		to: 9
 	},
 	clothesIDs: [
+		"short-sleeved-base-layer",
 		"bib-shorts-leg-warmers",
-		"base-layer",
 		"thick-long-sleeved-jersey",
 		"mid-weight-gloves"
 	]
@@ -91,8 +81,8 @@ const clothesMapping: ClothesTemperatureRange[] = [{
 		to: 7
 	},
 	clothesIDs: [
-		"bib-tights",
 		"long-sleeve-base-layer",
+		"bib-tights",
 		"thick-long-sleeved-jersey",
 		"winter-gloves"
 	]
@@ -102,8 +92,8 @@ const clothesMapping: ClothesTemperatureRange[] = [{
 		to: 5
 	},
 	clothesIDs: [
-		"bib-tights",
 		"long-sleeve-base-layer",
+		"bib-tights",
 		"thick-long-sleeved-jersey",
 		"winter-gloves",
 		"cap"
@@ -114,13 +104,13 @@ const clothesMapping: ClothesTemperatureRange[] = [{
 		to: -Infinity
 	},
 	clothesIDs: [
-		"bib-tights",
 		"long-sleeve-base-layer",
+		"bib-tights",
 		"thick-long-sleeved-jersey",
 		"jacket",
 		"winter-gloves",
 		"shoe-covers",
-		"cap"
+		"hat"
 	]
 }];
 

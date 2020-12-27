@@ -59,6 +59,13 @@ const paths = {
 		],
 		output: `${clientDist}/vid`
 	},
+	copyFonts: {
+		input: [
+			'src/client/font/*.woff',
+			'src/client/font/*.woff2'
+		],
+		output: `${clientDist}/font`
+	},
 	copyViews: {
 		input: [
 			'src/server/views/**/*',
@@ -275,6 +282,11 @@ gulp.task('copy:vids', () => {
 		.pipe(gulp.dest(paths.copyVids.output));
 });
 
+gulp.task('copy:fonts', () => {
+	return gulp.src(paths.copyFonts.input)
+		.pipe(gulp.dest(paths.copyFonts.output));
+});
+
 gulp.task('copy:views', () => {
 	return gulp.src(paths.copyViews.input)
 		.pipe(gulp.dest(paths.copyViews.output));
@@ -335,6 +347,7 @@ gulp.task('default', gulp.series([
 	'images',
 	'copy',
 	'copy:vids',
+	'copy:fonts',
 	'copy:views',
 	'lr',
 	'watch',
@@ -348,6 +361,7 @@ gulp.task('build', gulp.series([
 	'images',
 	'copy',
 	'copy:vids',
+	'copy:fonts',
 	'copy:views',
 	'typescript'
 ]));
