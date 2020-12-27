@@ -1,0 +1,11 @@
+{
+	"ACCU_WEATHER_API_KEY": "__SAMPLE_KEY_HERE__",
+	"productName": "Weather Checker",
+	"hideRobotsTxt": false,
+	"port": 3000,
+	"hostname": "localhost:3000",
+	"domain": "http://localhost:3000",
+	"environment": "development",
+	"baseAPIURL": "http://127.0.0.1:8080",
+	"analyticsTrackingCode": ""
+}

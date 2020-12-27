@@ -102,6 +102,7 @@ header {
 
     li {
         display: flex;
+        justify-content: space-between;
         align-items: center;
         border-bottom: 1px solid white;
         padding-top: 10px;
@@ -125,24 +126,9 @@ header {
 
 .clothes-outfit {
     flex: 2;
-    /*
-
-Working solution with CSS background images:
-
-background-image: url(/img/clothes/outfits/outfit-8-9-1ea0834f17.png);
-background-size: contain;
-background-repeat: no-repeat;
-background-position-x: center;
-width: 100%;
-    */
-    // flex: 1;
-    // display: flex;
-    // overflow: hidden;
-
-    // background-image: url(/img/clothes/outfits/outfit-8-9-1ea0834f17.png);
     background-size: contain;
     background-repeat: no-repeat;
-    background-position-x: center;
+    background-position-x: right;
     width: 100%;
 
     img {

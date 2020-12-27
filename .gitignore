@@ -27,7 +27,5 @@ config/*.json
 !config/default.json
 !config/default-0.json
 !config/custom-environment-variables.json
-notes/envato
-readme.md 
 example-responses/*
 design/*

@@ -163,7 +163,6 @@ async function homePage(request: express.Request, res: express.Response) {
 	const timeOptions = [nowTimeOption, ...futureTimeOptions];
 	
 	const renderObject = {
-		messages: request.flash('messages'),
 		isHome: true,
 		weather,
 		dataLastUpdated,

@@ -25,7 +25,6 @@ async function resolveLocation(request: express.Request, response: express.Respo
 	}
 
 	const renderObject = {
-		messages: request.flash('messages'),
 		results
 	};
 
