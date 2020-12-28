@@ -1,7 +1,9 @@
+// TODO: the URLs below should not be hardcoded
+
 @font-face {
     font-family: 'HelveticaNeue';
-    src: url('/font/HelveticaNeueBold.woff2') format('woff2'),
-        url('/font/HelveticaNeueBold.woff') format('woff');
+    src: url('/accumark/assets/font/HelveticaNeueBold.woff2') format('woff2'),
+        url('/accumark/assets/font/HelveticaNeueBold.woff') format('woff');
     font-weight: bold;
     font-style: normal;
     font-display: swap;
@@ -9,8 +11,8 @@
 
 @font-face {
     font-family: 'HelveticaNeue';
-    src: url('/font/HelveticaNeueRegular.woff2') format('woff2'),
-        url('/font/HelveticaNeueRegular.woff') format('woff');
+    src: url('/accumark/assets/font/HelveticaNeueRegular.woff2') format('woff2'),
+        url('/accumark/assets/font/HelveticaNeueRegular.woff') format('woff');
     font-weight: 100;
     font-style: normal;
     font-display: swap;
@@ -18,8 +20,8 @@
 
 @font-face {
     font-family: 'HelveticaNeue';
-    src: url('/font/HelveticaNeueItalic.woff2') format('woff2'),
-        url('/font/HelveticaNeueItalic.woff') format('woff');
+    src: url('/accumark/assets/font/HelveticaNeueItalic.woff2') format('woff2'),
+        url('/accumark/assets/font/HelveticaNeueItalic.woff') format('woff');
     font-weight: 100;
     font-style: italic;
     font-display: swap;
@@ -27,8 +29,8 @@
 
 @font-face {
     font-family: 'HelveticaNeue';
-    src: url('/font/HelveticaNeueThin.woff2') format('woff2'),
-        url('/font/HelveticaNeueThin.woff') format('woff');
+    src: url('/accumark/assets/font/HelveticaNeueThin.woff2') format('woff2'),
+        url('/accumark/assets/font/HelveticaNeueThin.woff') format('woff');
     font-weight: 100;
     font-style: normal;
     font-display: swap;
@@ -36,8 +38,8 @@
 
 @font-face {
     font-family: 'HelveticaNeue';
-    src: url('/font/HelveticaNeueHeavy.woff2') format('woff2'),
-        url('/font/HelveticaNeueHeavy.woff') format('woff');
+    src: url('/accumark/assets/font/HelveticaNeueHeavy.woff2') format('woff2'),
+        url('/accumark/assets/font/HelveticaNeueHeavy.woff') format('woff');
     font-weight: 900;
     font-style: normal;
     font-display: swap;
@@ -45,8 +47,8 @@
 
 @font-face {
     font-family: 'HelveticaNeue';
-    src: url('/font/HelveticaNeueBold.woff2') format('woff2'),
-        url('/font/HelveticaNeueBold.woff') format('woff');
+    src: url('/accumark/assets/font/HelveticaNeueBold.woff2') format('woff2'),
+        url('/accumark/assets/font/HelveticaNeueBold.woff') format('woff');
     font-weight: bold;
     font-style: normal;
     font-display: swap;
@@ -54,8 +56,8 @@
 
 @font-face {
     font-family: 'HelveticaNeue';
-    src: url('/font/HelveticaNeueBlackCond.woff2') format('woff2'),
-        url('/font/HelveticaNeueBlackCond.woff') format('woff');
+    src: url('/accumark/assets/font/HelveticaNeueBlackCond.woff2') format('woff2'),
+        url('/accumark/assets/font/HelveticaNeueBlackCond.woff') format('woff');
     font-weight: 900;
     font-style: normal;
     font-display: swap;
@@ -63,8 +65,8 @@
 
 @font-face {
     font-family: 'HelveticaNeue';
-    src: url('/font/HelveticaNeueMedium.woff2') format('woff2'),
-        url('/font/HelveticaNeueMedium.woff') format('woff');
+    src: url('/accumark/assets/font/HelveticaNeueMedium.woff2') format('woff2'),
+        url('/accumark/assets/font/HelveticaNeueMedium.woff') format('woff');
     font-weight: 500;
     font-style: normal;
     font-display: swap;
@@ -72,8 +74,8 @@
 
 @font-face {
     font-family: 'HelveticaNeue';
-    src: url('/font/HelveticaNeueLight.woff2') format('woff2'),
-        url('/font/HelveticaNeueLight.woff') format('woff');
+    src: url('/accumark/assets/font/HelveticaNeueLight.woff2') format('woff2'),
+        url('/accumark/assets/font/HelveticaNeueLight.woff') format('woff');
     font-weight: 300;
     font-style: normal;
     font-display: swap;
@@ -81,8 +83,8 @@
 
 @font-face {
     font-family: 'HelveticaNeue';
-    src: url('/font/HelveticaNeueLight.woff2') format('woff2'),
-        url('/font/HelveticaNeueLight.woff') format('woff');
+    src: url('/accumark/assets/font/HelveticaNeueLight.woff2') format('woff2'),
+        url('/accumark/assets/font/HelveticaNeueLight.woff') format('woff');
     font-weight: 300;
     font-style: normal;
     font-display: swap;
@@ -90,8 +92,8 @@
 
 @font-face {
     font-family: 'HelveticaNeue';
-    src: url('/font/HelveticaNeueMedium.woff2') format('woff2'),
-        url('/font/HelveticaNeueMedium.woff') format('woff');
+    src: url('/accumark/assets/font/HelveticaNeueMedium.woff2') format('woff2'),
+        url('/accumark/assets/font/HelveticaNeueMedium.woff') format('woff');
     font-weight: 500;
     font-style: normal;
     font-display: swap;

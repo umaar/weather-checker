@@ -8,6 +8,9 @@ import config from 'config';
 import express from 'express';
 import revisionManifest from './revision-manifest.js';
 
+const rootPath: string = config.get('rootPath');
+const assetVirtualPath = `${rootPath}/assets`;
+
 function init(app: express.Application) {
 	const viewFolders = [
 		path.join(process.cwd(), 'dist', 'server', 'views')
@@ -41,7 +44,7 @@ function init(app: express.Application) {
 		protocol: 'https'
 	}));
 
-	app.use(revisionManifest());
+	app.use(revisionManifest(assetVirtualPath));
 
 	app.use(cookieParser());
 	app.use(bodyParser.json());
@@ -59,7 +62,7 @@ function init(app: express.Application) {
 		});
 	}
 
-	app.use(express.static('dist/client', {
+	app.use(assetVirtualPath, express.static('dist/client', {
 		maxAge: '1y'
 	}));
 }

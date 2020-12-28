@@ -10,7 +10,7 @@ function getManifestFile() {
 	return JSON.parse(rawManifest as any);
 }
 
-function revisionManifest() {
+function revisionManifest(rootPath: string) {
 	// TODO: In production, don't invoke getManifestFile() each time
 	return function (request: express.Request, res: express.Response, next: express.NextFunction) {
 		try {
@@ -21,7 +21,7 @@ function revisionManifest() {
 		}
 
 		res.locals.rev = function (path: string) {
-			return '/' + (manifest[path] || path);
+			return `${rootPath}/${(manifest[path] || path)}`;
 		};
 
 		next();
