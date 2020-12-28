@@ -10,6 +10,7 @@ import fetchAndSaveCurrentWeather from '../lib/fetch-and-save-current-weather.js
 import addQueryStringToURL from '../lib/add-query-string-to-url.js';
 import generateFutureTimeOptions from '../lib/generate-future-time-options.js';
 import calculateClothes from '../lib/calculate-clothes.js';
+import getBaseURL from '../lib/get-base-url.js';
 
 const duration = timeFormatter('en');
 
@@ -158,7 +159,7 @@ async function homePage(request: express.Request, res: express.Response) {
 		selected: !selectedTime
 	};
 
-	
+	const locationSearchFormURL = `${getBaseURL(request)}/resolve-location`;
 	
 	const timeOptions = [nowTimeOption, ...futureTimeOptions];
 	
@@ -169,7 +170,8 @@ async function homePage(request: express.Request, res: express.Response) {
 		forceWeatherUpdateLink,
 		timeOptions,
 		locationInfo,
-		clothes
+		clothes,
+		locationSearchFormURL
 	};
 
 	res.render('index', renderObject);

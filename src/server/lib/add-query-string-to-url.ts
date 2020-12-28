@@ -17,7 +17,7 @@ function addQueryStringToURL(
 		requestURL.searchParams.set(...queryString);
 	}
 
-	return requestURL.search;
+	return requestURL;
 }
 
 export default addQueryStringToURL;

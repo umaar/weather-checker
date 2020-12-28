@@ -8,5 +8,6 @@
 	"environment": "development",
 	"baseAPIURL": "http://127.0.0.1:8080",
 	"analyticsTrackingCode": "",
-	"shouldEnableDevelopmentLiveReloadScript": false
+	"shouldEnableDevelopmentLiveReloadScript": false,
+	"rootPath": "/accumark"
 }

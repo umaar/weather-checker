@@ -7,7 +7,7 @@
 				Select Location
 			{% endif %}
 		</summary>
-		<form action="/resolve-location" method="GET">
+		<form action="{{locationSearchFormURL}}" method="GET">
 			<fieldset>
 				<label for="query">Query</label>
 				<input required type="text" name="query" id="query" placeholder="brighton">

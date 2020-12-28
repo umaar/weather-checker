@@ -3,7 +3,7 @@
 ## To start locally
 
 ```sh
-# Run these commands and open http://localhost:3000
+# Run these commands and open http://localhost:3000/accumark
 rm db-development-weather-checker.sqlite && make migrate && make seed && make
 ```
 
@@ -95,3 +95,4 @@ See [autocomplete-bright.json](example-responses/autocomplete-bright.json)
 ### Note
 
 24 hours or more are not permitted by the API.
+

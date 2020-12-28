@@ -5,6 +5,8 @@ import {
 	getLocationFromLatLon
 } from '../lib/api.js';
 
+import getBaseURL from '../lib/get-base-url.js';
+
 async function resolveLocation(request: express.Request, response: express.Response) {
 	const {
 		query,
@@ -23,6 +25,14 @@ async function resolveLocation(request: express.Request, response: express.Respo
 		// Regular search string like 'brighton'
 		results = await searchForLocation(String(query));
 	}
+
+	results = results.map(result => {
+		const locationURL = `${getBaseURL(request)}?location=${result.id}`;
+		return {
+			...result,
+			url: locationURL
+		}
+	});
 
 	const renderObject = {
 		results
