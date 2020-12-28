@@ -38,13 +38,13 @@ interface foo {
 
 function formatWeather(weather: foo) {
 	return {
-		weatherIcon: weather.WeatherIcon,
+		weatherIcon: String(weather.WeatherIcon).padStart(2, '0'),
 		weatherText: weather.WeatherText || '-',
 		windDirection: weather.Wind.Direction.English,
 		windGust: handleMetricValue(weather.WindGust.Speed) + handleMetricUnit(weather.WindGust.Speed),
 		windSpeed: handleMetricValue(weather.Wind.Speed) + handleMetricUnit(weather.Wind.Speed),
-		temperature: handleMetricValue(weather.Temperature),
-		realFeelTemperature: handleMetricValue(weather.RealFeelTemperature),
+		temperature: Math.round(handleMetricValue(weather.Temperature)),
+		realFeelTemperature: Math.round(handleMetricValue(weather.RealFeelTemperature)),
 		hasRain: weather.HasPrecipitation
 	};
 }

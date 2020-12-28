@@ -29,7 +29,7 @@ async function fetchJSON({
 
 async function searchForLocation(query: string) {
 	const results = await fetchJSON({
-		url: '/autocomplete-bright.json', // /locations/v1/cities/autocomplete
+		url: '/locations/v1/cities/autocomplete',
 		params: {
 			q: query
 		}
@@ -47,9 +47,9 @@ async function searchForLocation(query: string) {
 	return locationsQueries.insertLocations(formattedResults);
 }
 
-async function fetchCurrentWeather(locationID: string) {
+async function fetchCurrentWeather(locationKey: string) {
 	return fetchJSON({
-		url: '/current-conditions.json', // /currentconditions/v1/${locationKey}
+		url: `/currentconditions/v1/${locationKey}`,
 		params: {
 			details: String(true)
 		}
@@ -58,7 +58,7 @@ async function fetchCurrentWeather(locationID: string) {
 
 async function fetchLatestForecast(locationKey: string) {
 	return fetchJSON({
-		url: '/forecast-12-hours.json', // /forecasts/v1/hourly/12hour/${locationKey}
+		url: `/forecasts/v1/hourly/12hour/${locationKey}`, // /forecasts/v1/hourly/12hour/${locationKey}
 		params: {
 			details: String(true),
 			metric: String(true)
@@ -68,7 +68,7 @@ async function fetchLatestForecast(locationKey: string) {
 
 async function getLocationFromLatLon(query: string) {
 	const result = await fetchJSON({
-		url: '/location-based-on-lat-lon-v2.json', // /locations/v1/cities/geoposition/search
+		url: '/locations/v1/cities/geoposition/search', // /locations/v1/cities/geoposition/search
 		params: {
 			q: query,
 			details: String(true)

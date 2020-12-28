@@ -30,8 +30,6 @@ header {
 }
 
 .container {
-    background: linear-gradient(#36A9E1, #2581C4);
-    // height: 94vh;
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -105,8 +103,8 @@ header {
         justify-content: space-between;
         align-items: center;
         border-bottom: 1px solid white;
-        padding-top: 10px;
-        padding-bottom: 10px;
+        padding-top: 2px;
+        padding-bottom: 2px;
 
         img {
             height: auto;

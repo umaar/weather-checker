@@ -100,8 +100,8 @@ const clothesMapping: ClothesTemperatureRange[] = [{
 	]
 }, {
 	temperatures: {
-		from: 3,
-		to: -Infinity
+		from: -Infinity,
+		to: 3
 	},
 	clothesIDs: [
 		"long-sleeve-base-layer",

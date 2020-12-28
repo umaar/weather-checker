@@ -6,7 +6,7 @@
 	"hostname": "localhost:3000",
 	"domain": "http://localhost:3000",
 	"environment": "development",
-	"baseAPIURL": "http://127.0.0.1:8080",
+	"baseAPIURL": "https://dataservice.accuweather.com",
 	"analyticsTrackingCode": "",
 	"shouldEnableDevelopmentLiveReloadScript": false,
 	"rootPath": "/accumark"

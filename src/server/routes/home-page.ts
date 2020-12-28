@@ -64,7 +64,12 @@ async function homePage(request: express.Request, res: express.Response) {
 
 		if (shouldUpdateCurrentWeather) {
 			console.log('Weather is stale, fetching new...');
-			fullWeatherInfo = await fetchAndSaveCurrentWeather(String(locationID));
+			
+			fullWeatherInfo = await fetchAndSaveCurrentWeather({
+				locationID: String(locationID),
+				locationKey: locationInfo.locationKey
+			});
+
 			weather = fullWeatherInfo?.current;
 			weatherUpdatedAt = fullWeatherInfo?.updatedAt;
 

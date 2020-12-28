@@ -5,9 +5,15 @@ import {
 	fetchLatestForecast
 } from './api.js';
 
-async function fetchAndSaveCurrentWeather(locationID: string) {
-	const currentWeather = await fetchCurrentWeather(locationID);
-	const latestForecast = await fetchLatestForecast(locationID);
+async function fetchAndSaveCurrentWeather({
+	locationID,
+	locationKey
+}: {
+	locationID: string;
+	locationKey: string;
+}) {
+	const currentWeather = await fetchCurrentWeather(locationKey);
+	const latestForecast = await fetchLatestForecast(locationKey);
 
 	return weatherQueries.insertOrUpdateWeather({
 		locationID,
