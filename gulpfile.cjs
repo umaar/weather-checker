@@ -84,6 +84,7 @@ const paths = {
 		input: [
 			'src/client/img/**/*.jpg',
 			'src/client/img/**/*.png',
+			'src/client/img/**/*.webp',
 			'src/client/img/**/*.svg'
 		],
 		output: `${clientDist}/img/`

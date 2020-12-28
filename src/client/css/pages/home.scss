@@ -80,6 +80,8 @@ header {
 }
 
 .refresh-message {
+    font-weight: bold;
+    letter-spacing: -1px;
     font-size: 13px;
     text-align: center;;
     font-style: italic;
@@ -97,8 +99,8 @@ header {
 .clothes-container {
     flex-grow: 1;
     display: flex;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .clothes-list {
@@ -114,7 +116,7 @@ header {
 
         img {
             height: auto;
-            max-width: 40px;
+            max-width: 45px;
         }
     }
 
