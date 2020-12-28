@@ -3,7 +3,6 @@
 	margin-left: auto;
 	margin-right: auto;
 	max-width: $container-width;
-	padding: 15px;
 	max-width: 600px;
 }
 
@@ -14,8 +13,8 @@ body {
     font-family: 'HelveticaNeue', serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-	margin: 0;
-	padding: 0;
+	margin: 0px;
+	padding: 10px 20px 0 20px;
 	background: linear-gradient(#36A9E1, #2581C4);
 	min-height: -webkit-fill-available;
 }

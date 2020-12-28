@@ -20,20 +20,20 @@ a {
 header summary {
     font-weight: bold;
     cursor: pointer;
+    font-size: 14px;
 }
 
 header {
     display: flex;
     justify-content: space-between;
     padding-bottom: 10px;
-    border-bottom: 1px solid white;;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.6);
 }
 
 .container {
     display: flex;
     flex-direction: column;
     width: 100%;
-    outline: 2px solid yellow;
     min-height: 100vh;
     min-height: -webkit-fill-available;
 }
@@ -45,7 +45,7 @@ header {
     border-bottom: 1px solid rgba(255, 255, 255, 0.6);
 
     display: flex;
-    align-items: center;
+    align-items: start;
     justify-content: space-between;
 
     img {
@@ -55,12 +55,15 @@ header {
 
 .weather-extra-temperature {
     display: flex;
+    align-self: stretch;
     flex-direction: column;
     font-weight: bold;
+    justify-content: space-between;
 }
 
 .weather-extra-temperature--regular {
-    font-size: 38px;
+    font-size: 45px;
+    line-height: 45px;
 }
 
 .weather-extra-temperature--real-feel {
@@ -71,7 +74,8 @@ header {
 }
 
 .weather-metadata p {
-    margin: 5px;
+    margin-top: 2px;
+    margin-bottom: 2px;
     font-size: 13px;
 }
 
@@ -98,13 +102,13 @@ header {
 }
 
 .clothes-list {
-    flex: 1;
+    flex: 2;
 
     li {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        border-bottom: 1px solid white;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.6);
         padding-top: 2px;
         padding-bottom: 2px;
 
@@ -120,12 +124,13 @@ header {
 
     span {
         font-size: 12px;
+        font-weight: bold;
         margin-right: 20px;
     }
 }
 
 .clothes-outfit {
-    flex: 2;
+    flex: 3;
     background-size: contain;
     background-repeat: no-repeat;
     background-position-x: right;
