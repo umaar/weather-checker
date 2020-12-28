@@ -16,7 +16,8 @@ body {
 	-moz-osx-font-smoothing: grayscale;
 	margin: 0;
 	padding: 0;
-    background: linear-gradient(#36A9E1, #2581C4);
+	background: linear-gradient(#36A9E1, #2581C4);
+	min-height: -webkit-fill-available;
 }
 
 h4 {
