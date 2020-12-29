@@ -135,7 +135,7 @@ function calculateClothes(currentTemperature: number) {
 
 	return {
 		individualItems,
-		mainImage: `outfit-${temperatures.from}-${temperatures.to}.webp`
+		mainImage: `outfit-${temperatures.from}-${temperatures.to}.png`
 	}
 }
 
