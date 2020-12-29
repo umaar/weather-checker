@@ -14,7 +14,7 @@ import getBaseURL from '../lib/get-base-url.js';
 
 const duration = timeFormatter('en');
 
-async function homePage(request: express.Request, res: express.Response) {
+async function homePage(request: express.Request, response: express.Response) {
 	const locationID = request.query.location ? String(request.query.location) : '';
 	const locationInfo = await locationsQueries.getLocation(locationID);
 
@@ -22,7 +22,7 @@ async function homePage(request: express.Request, res: express.Response) {
 		if (!locationInfo) {
 			const redirectTo = getBaseURL(request);
 			console.log('redirecting to:', redirectTo);
-			return res.redirect(redirectTo);
+			return response.redirect(redirectTo);
 		}
 	}
 
@@ -37,7 +37,7 @@ async function homePage(request: express.Request, res: express.Response) {
 			queryStringParams: ['selected-time']
 		});
 		console.log('redirecting to:', redirectURL);
-		return res.redirect(redirectURL);
+		return response.redirect(redirectURL);
 	}
 
 	const forceReload = request.query['force-reload'];
@@ -56,7 +56,7 @@ async function homePage(request: express.Request, res: express.Response) {
 			selectedTime
 		}) : fullWeatherInfo?.current;
 
-		const shouldUpdateCurrentWeather = forceReload || !weather || !isWeatherFresh(weatherUpdatedAt);
+		const shouldUpdateCurrentWeather = forceReload ?? !weather ?? !isWeatherFresh(weatherUpdatedAt);
 
 		if (shouldUpdateCurrentWeather) {
 			console.log('Weather is stale, fetching new...');
@@ -77,7 +77,7 @@ async function homePage(request: express.Request, res: express.Response) {
 					queryStringParams: ['force-reload']
 				});
 
-				return res.redirect(redirectURL);
+				return response.redirect(redirectURL);
 			}
 		}
 	}
@@ -85,11 +85,11 @@ async function homePage(request: express.Request, res: express.Response) {
 	let forceWeatherUpdateLink;
 
 	type DataLastUpdated = {
-		rawTime: number;
-		friendlyTime: string;
+		rawTime?: number;
+		friendlyTime?: string;
 	};
 
-	const dataLastUpdated = {} as DataLastUpdated;
+	const dataLastUpdated: DataLastUpdated = {};
 
 	if (weather) {
 		const lastUpdatedAt = new Date(Date.parse(weatherUpdatedAt));
@@ -108,7 +108,7 @@ async function homePage(request: express.Request, res: express.Response) {
 		let nextHourWeather;
 
 		if (selectedTime) {
-			const selectedForecastIndex = fullWeatherInfo?.forecast.findIndex(({time}: {time: string}) => {
+			const selectedForecastIndex: number = fullWeatherInfo?.forecast.findIndex(({time}: {time: string}) => {
 				return time === weather.time;
 			});
 
@@ -175,7 +175,7 @@ async function homePage(request: express.Request, res: express.Response) {
 		locationSearchFormURL
 	};
 
-	res.render('index', renderObject);
+	response.render('index', renderObject);
 }
 
 export default homePage;

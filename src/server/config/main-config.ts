@@ -21,7 +21,6 @@ function init(app: express.Application) {
 	const nunjucksEnvironment = nunjucks.configure(viewFolders, {
 		express: app,
 		autoescape: true,
-		// TODO: Configure noCache based on development environments
 		noCache: true
 	});
 
@@ -32,7 +31,7 @@ function init(app: express.Application) {
 	app.locals.config = {
 		productName: config.get('productName'),
 		shouldEnableDevelopmentLiveReloadScript: useLiveReload,
-		analyticsTrackingCode: analyticsTrackingCode.length ? analyticsTrackingCode : undefined
+		analyticsTrackingCode: analyticsTrackingCode || undefined
 	};
 
 	app.set('view engine', 'html');
@@ -53,9 +52,9 @@ function init(app: express.Application) {
 	}));
 
 	if (config.get('hideRobotsTxt')) {
-		app.use((request, res, next) => {
+		app.use((request, response, next) => {
 			if (request.url === '/robots.txt') {
-				return res.status(404).send('Not found');
+				return response.status(404).send('Not found');
 			}
 
 			next();

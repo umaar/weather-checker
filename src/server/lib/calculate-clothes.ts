@@ -1,3 +1,5 @@
+import {Template} from 'nunjucks';
+
 const clothesIdentifiers = Object.freeze({
 	cap: 'Cap',
 	hat: 'Hap',
@@ -117,10 +119,12 @@ const clothesMapping: ClothesTemperatureRange[] = [{
 function calculateClothes(currentTemperature: number) {
 	currentTemperature = Math.round(currentTemperature);
 
-	const {
-		clothesIDs,
-		temperatures
-	}: any = clothesMapping.find(({temperatures}) => {
+	// Const {
+	// 	clothesIDs,
+	// 	temperatures
+	// }
+
+	const result = clothesMapping.find(({temperatures}) => {
 		const isInRange =
 			currentTemperature >= temperatures.from &&
 			currentTemperature <= temperatures.to;
@@ -128,15 +132,24 @@ function calculateClothes(currentTemperature: number) {
 		return isInRange;
 	});
 
-	const individualItems = clothesIDs.map((clothesID: any) => {
-		return [clothesID, (clothesIdentifiers as any)[clothesID]];
-	});
+	if (result) {
+		const {
+			clothesIDs,
+			temperatures
+		} = result;
 
-	return {
-		individualItems,
-		// .webp performs better, however .png is needed for old ios safari
-		mainImage: `outfit-${temperatures.from}-${temperatures.to}.png`
-	};
+		const individualItems = clothesIDs.map((clothesID: any) => {
+			return [clothesID, (clothesIdentifiers as any)[clothesID]];
+		});
+
+		return {
+			individualItems,
+			// .webp performs better, however .png is needed for old ios safari
+			mainImage: `outfit-${temperatures.from}-${temperatures.to}.png`
+		};
+	}
+
+	throw new Error(`No clothes range found for temperature '${currentTemperature}'`);
 }
 
 export default calculateClothes;

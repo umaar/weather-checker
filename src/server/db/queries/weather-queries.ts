@@ -11,7 +11,7 @@ function formatForecasts(forecasts: string) {
 	});
 }
 
-function handleMetricUnit(data: any) {
+function handleMetricUnit(data: any): string {
 	if (data.Metric) {
 		return data.Metric.Unit;
 	}
@@ -19,7 +19,7 @@ function handleMetricUnit(data: any) {
 	return data.Unit;
 }
 
-function handleMetricValue(data: any) {
+function handleMetricValue(data: any): number {
 	if (data.Metric) {
 		return data.Metric.Value;
 	}
@@ -35,12 +35,20 @@ function handleWeather(rawCurrentWeather: string) {
 type foo = Record<string, any>;
 
 function formatWeather(weather: foo) {
+	const windgustSpeedValue = handleMetricValue(weather.WindGust.Speed);
+	const windgustSpeedUnit = handleMetricUnit(weather.WindGust.Speed);
+	const windGust = `${windgustSpeedValue}${windgustSpeedUnit}`;
+
+	const windSpeedValue = handleMetricValue(weather.Wind.Speed);
+	const windSpeedUnit = handleMetricUnit(weather.Wind.Speed);
+	const windSpeed = `${windSpeedValue}${windSpeedUnit}`;
+
 	return {
 		weatherIcon: String(weather.WeatherIcon).padStart(2, '0'),
 		weatherText: weather.WeatherText || '-',
 		windDirection: weather.Wind.Direction.English,
-		windGust: handleMetricValue(weather.WindGust.Speed) + handleMetricUnit(weather.WindGust.Speed),
-		windSpeed: handleMetricValue(weather.Wind.Speed) + handleMetricUnit(weather.Wind.Speed),
+		windGust,
+		windSpeed,
 		temperature: Math.round(handleMetricValue(weather.Temperature)),
 		realFeelTemperature: Math.round(handleMetricValue(weather.RealFeelTemperature)),
 		hasRain: weather.HasPrecipitation
@@ -94,7 +102,9 @@ async function insertOrUpdateWeather({
 	return getWeatherForLocation(locationID);
 }
 
-export default {
+const out = {
 	getWeatherForLocation,
 	insertOrUpdateWeather
 };
+
+export default out;

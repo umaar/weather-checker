@@ -5,13 +5,15 @@ import resolveLocation from './resolve-location.js';
 const router = express.Router();
 /* eslint-enable new-cap */
 
-export function wrapHandler(asyncFunction: Function) {
-	const exceptionHandled = async (request: express.Request, res: express.Response, next?: express.NextFunction) => {
-	  try {
-			return await asyncFunction(request, res, next);
-	  } catch (error) {
+type AsyncFunction = (request: express.Request, response: express.Response, next?: express.NextFunction) => Promise<void>;
+
+export function wrapHandler(asyncFunction: AsyncFunction) {
+	const exceptionHandled = async (request: express.Request, response: express.Response, next?: express.NextFunction) => {
+		try {
+			return await asyncFunction(request, response, next);
+		} catch (error: unknown) {
 			return next!(error);
-	  }
+		}
 	};
 
 	return exceptionHandled;

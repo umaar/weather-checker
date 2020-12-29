@@ -1,6 +1,8 @@
+/* global window, document */
+
 function getCurrentLocation() {
 	return new Promise((resolve, reject) => {
-		navigator.geolocation.getCurrentPosition(({coords}) => {
+		window.navigator.geolocation.getCurrentPosition(({coords}) => {
 			resolve(coords);
 		}, reject);
 	});

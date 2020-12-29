@@ -1,3 +1,1 @@
-console.log('no tests!');
-
-process.exit(1);
+throw new Error('no tests!');

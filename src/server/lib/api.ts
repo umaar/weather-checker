@@ -4,7 +4,7 @@ import config from 'config';
 
 import locationsQueries from '../db/queries/locations-queries.js';
 
-const baseAPIURL = config.get('baseAPIURL');
+const baseAPIURL: string = config.get('baseAPIURL');
 
 const APIKey: string = config.get('ACCU_WEATHER_API_KEY');
 
@@ -24,12 +24,13 @@ async function fetchJSON({
 	console.log('Fetching:', URLToFetch);
 
 	const response = await fetch(URLToFetch);
-	if (response.status !== 200) {
-		const jsonResponse = JSON.stringify(await response.json());
-		throw new Error(`API Error. Received a '${response.status}' status code. ${jsonResponse}`);
-	} else {
+
+	if (response.status === 200) {
 		return response.json();
 	}
+
+	const jsonResponse = JSON.stringify(await response.json());
+	throw new Error(`API Error. Received a '${response.status}' status code. ${jsonResponse}`);
 }
 
 async function searchForLocation(query: string) {

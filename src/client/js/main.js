@@ -1,3 +1,4 @@
+/* global window */
 import thing from './modules/thing.js';
 
 function init() {

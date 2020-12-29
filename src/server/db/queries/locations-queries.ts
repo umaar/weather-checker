@@ -1,5 +1,5 @@
-import knex from '../connection.js';
 import {customAlphabet} from 'nanoid';
+import knex from '../connection.js';
 
 const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyz', 8);
 
@@ -21,6 +21,7 @@ async function insertLocations(locations: Location[]) {
 		});
 
 		if (matchingLocation) {
+			// eslint-disable-next-line no-await-in-loop
 			await knex('locations')
 				.where({
 					locationKey: location.locationKey
@@ -37,6 +38,7 @@ async function insertLocations(locations: Location[]) {
 				...location,
 				id: nanoid()
 			};
+			// eslint-disable-next-line no-await-in-loop
 			await knex('locations').insert(newLocation);
 			updatedLocations.push(newLocation);
 		}
@@ -53,7 +55,9 @@ async function getLocation(locationID: string) {
 		.first();
 }
 
-export default {
+const out = {
 	insertLocations,
 	getLocation
 };
+
+export default out;

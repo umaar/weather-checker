@@ -1,8 +1,11 @@
 import express from 'express';
 
 function getBaseURL(request: express.Request) {
-	const baseURL = `${request.protocol}://${request.get('host')}${request.baseUrl}`;
-	return baseURL;
+	const protocol = request.protocol;
+	const host = request.get('host') as string;
+	const base = request.baseUrl;
+
+	return `${protocol}://${host}${base}`;
 }
 
 export default getBaseURL;

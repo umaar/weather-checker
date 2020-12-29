@@ -11,17 +11,17 @@ function getManifestFile() {
 }
 
 function revisionManifest(rootPath: string) {
-	// TODO: In production, don't invoke getManifestFile() each time
-	return function (request: express.Request, res: express.Response, next: express.NextFunction) {
+	return function (request: express.Request, response: express.Response, next: express.NextFunction) {
 		try {
 			manifest = getManifestFile();
-		} catch (error) {
+		} catch (error: unknown) {
 			console.log('Error getting revision manifest:', error);
 			manifest = {};
 		}
 
-		res.locals.rev = function (path: string) {
-			return `${rootPath}/${(manifest[path] || path)}`;
+		response.locals.rev = function (path: string) {
+			const assetPath: string = (manifest[path] || path);
+			return `${rootPath}/${assetPath}`;
 		};
 
 		next();

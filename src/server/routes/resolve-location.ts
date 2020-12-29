@@ -7,6 +7,10 @@ import {
 
 import getBaseURL from '../lib/get-base-url.js';
 
+interface Result {
+	id: string;
+}
+
 async function resolveLocation(request: express.Request, response: express.Response) {
 	let {
 		query = '',
@@ -23,7 +27,7 @@ async function resolveLocation(request: express.Request, response: express.Respo
 
 	results = await (queryType === 'coordinates' ? getLocationFromLatLon(query) : searchForLocation(query));
 
-	results = results.map(result => {
+	results = results.map((result: Result) => {
 		const locationURL = `${getBaseURL(request)}?location=${result.id}`;
 		return {
 			...result,

@@ -1,8 +1,12 @@
+interface Forecast {
+	time: string;
+}
+
 function findForecastedWeather({
 	forecasts,
 	selectedTime
 }: {
-	forecasts: [];
+	forecasts: Forecast[];
 	selectedTime: number;
 }) {
 	return forecasts.find(({time}) => {
