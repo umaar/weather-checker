@@ -20,9 +20,9 @@ async function homePage(request: express.Request, res: express.Response) {
 	
 	if (locationID) {
 		if (!locationInfo) {
-			const {origin} = constructValidURLFromRequest(request);
-			console.log('redirecting to:', origin);
-			return res.redirect(origin);
+			const redirectTo = getBaseURL(request);			
+			console.log('redirecting to:', redirectTo);
+			return res.redirect(redirectTo);
 		}
 	}
 

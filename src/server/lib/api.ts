@@ -24,7 +24,12 @@ async function fetchJSON({
 	console.log('Fetching:', URLToFetch);
 
 	const response = await fetch(URLToFetch);
-	return response.json();
+	if (response.status !== 200) {
+		const jsonResponse = JSON.stringify(await response.json());
+		throw new Error(`API Error. Received a '${response.status}' status code. ${jsonResponse}`);
+	} else {
+		return response.json();
+	}
 }
 
 async function searchForLocation(query: string) {
