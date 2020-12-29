@@ -23,7 +23,8 @@ function hello() {
 			const {latitude, longitude} = await getCurrentLocation();
 			document.querySelector('#query').value = `${latitude},${longitude}`;
 			form.querySelector('[type="submit"]').click();
-		} catch {
+		} catch(error) {
+			console.log('Error getting location', error)
 			btn.disabled = false;
 			btn.textContent = 'Use current location';
 		}
