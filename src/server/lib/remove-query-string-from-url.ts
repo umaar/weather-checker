@@ -6,8 +6,8 @@ function removeQueryStringFromURL({
 	request,
 	queryStringParams: queryStringParameters
 }: {
-	request: express.Request,
-	queryStringParams: string[]
+	request: express.Request;
+	queryStringParams: string[];
 }) {
 	const requestURL = constructValidURLFromRequest(request);
 

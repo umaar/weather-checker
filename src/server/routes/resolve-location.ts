@@ -21,19 +21,14 @@ async function resolveLocation(request: express.Request, response: express.Respo
 
 	let results = [];
 
-	if (queryType === 'coordinates') {
-		results = await getLocationFromLatLon(query);
-	} else {
-		// Regular search string like 'brighton'
-		results = await searchForLocation(query);
-	}
+	results = await (queryType === 'coordinates' ? getLocationFromLatLon(query) : searchForLocation(query));
 
 	results = results.map(result => {
 		const locationURL = `${getBaseURL(request)}?location=${result.id}`;
 		return {
 			...result,
 			url: locationURL
-		}
+		};
 	});
 
 	const renderObject = {

@@ -8,25 +8,27 @@ function getCurrentLocation() {
 
 function hello() {
 	const form = document.querySelector('form');
-	if (!form) return;
+	if (!form) {
+		return;
+	}
 
-	const btn = document.createElement('button');
-	btn.textContent = 'Use current location';
-	form.appendChild(btn);
+	const button = document.createElement('button');
+	button.textContent = 'Use current location';
+	form.append(button);
 
-	btn.addEventListener('click', async evt => {
-		evt.preventDefault();
-		btn.disabled = true;
-		btn.textContent = 'Please wait';
+	button.addEventListener('click', async event => {
+		event.preventDefault();
+		button.disabled = true;
+		button.textContent = 'Please wait';
 		document.querySelector('#coordinates').click();
 		try {
 			const {latitude, longitude} = await getCurrentLocation();
 			document.querySelector('#query').value = `${latitude},${longitude}`;
 			form.querySelector('[type="submit"]').click();
-		} catch(error) {
-			console.log('Error getting location', error)
-			btn.disabled = false;
-			btn.textContent = 'Use current location';
+		} catch (error) {
+			console.log('Error getting location', error);
+			button.disabled = false;
+			button.textContent = 'Use current location';
 		}
 	});
 }

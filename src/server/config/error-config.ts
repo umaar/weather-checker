@@ -18,7 +18,7 @@ function init(app: express.Application) {
 		response: express.Response,
 		next: express.NextFunction
 	) => {
-		console.log('Express error handler: ', error);
+		console.log('Express error handler:', error);
 
 		if (response.headersSent) {
 			return next(error);

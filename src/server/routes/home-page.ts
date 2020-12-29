@@ -15,12 +15,12 @@ import getBaseURL from '../lib/get-base-url.js';
 const duration = timeFormatter('en');
 
 async function homePage(request: express.Request, res: express.Response) {
-	const locationID = request.query['location'] ? String(request.query['location']) : '';
+	const locationID = request.query.location ? String(request.query.location) : '';
 	const locationInfo = await locationsQueries.getLocation(locationID);
-	
+
 	if (locationID) {
 		if (!locationInfo) {
-			const redirectTo = getBaseURL(request);			
+			const redirectTo = getBaseURL(request);
 			console.log('redirecting to:', redirectTo);
 			return res.redirect(redirectTo);
 		}
@@ -50,21 +50,17 @@ async function homePage(request: express.Request, res: express.Response) {
 	if (locationID) {
 		fullWeatherInfo = await weatherQueries.getWeatherForLocation(locationID);
 		weatherUpdatedAt = fullWeatherInfo?.updatedAt;
-		
-		if (selectedTime) {
-			weather = findForecastedWeather({
-				forecasts: fullWeatherInfo?.forecast,
-				selectedTime
-			});
-		} else {
-			weather = fullWeatherInfo?.current;
-		}
-		
+
+		weather = selectedTime ? findForecastedWeather({
+			forecasts: fullWeatherInfo?.forecast,
+			selectedTime
+		}) : fullWeatherInfo?.current;
+
 		const shouldUpdateCurrentWeather = forceReload || !weather || !isWeatherFresh(weatherUpdatedAt);
 
 		if (shouldUpdateCurrentWeather) {
 			console.log('Weather is stale, fetching new...');
-			
+
 			fullWeatherInfo = await fetchAndSaveCurrentWeather({
 				locationID: String(locationID),
 				locationKey: locationInfo.locationKey
@@ -118,7 +114,7 @@ async function homePage(request: express.Request, res: express.Response) {
 
 			nextHourWeather = fullWeatherInfo?.forecast[selectedForecastIndex + 1];
 		} else {
-			// weather = fullWeatherInfo?.current;
+			// Weather = fullWeatherInfo?.current;
 			const copiedTime = new Date();
 			copiedTime.setHours(copiedTime.getHours() + 1);
 			copiedTime.setMinutes(0);
@@ -165,9 +161,9 @@ async function homePage(request: express.Request, res: express.Response) {
 	};
 
 	const locationSearchFormURL = `${getBaseURL(request)}/resolve-location`;
-	
+
 	const timeOptions = [nowTimeOption, ...futureTimeOptions];
-	
+
 	const renderObject = {
 		isHome: true,
 		weather,

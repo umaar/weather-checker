@@ -2,8 +2,8 @@ function findForecastedWeather({
 	forecasts,
 	selectedTime
 }: {
-	forecasts: [],
-	selectedTime: number
+	forecasts: [];
+	selectedTime: number;
 }) {
 	return forecasts.find(({time}) => {
 		return selectedTime === Date.parse(time);

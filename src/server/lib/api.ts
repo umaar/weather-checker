@@ -1,10 +1,10 @@
 import fetch from 'node-fetch';
 import config from 'config';
-
-const baseAPIURL = config.get('baseAPIURL');
-// import {URLSearchParams} from 'url';
+// Import {URLSearchParams} from 'url';
 
 import locationsQueries from '../db/queries/locations-queries.js';
+
+const baseAPIURL = config.get('baseAPIURL');
 
 const APIKey: string = config.get('ACCU_WEATHER_API_KEY');
 
@@ -13,7 +13,7 @@ async function fetchJSON({
 	params
 }: {
 	url: string;
-	params: {[index: string]: string};
+	params: Record<string, string>;
 }) {
 	const queryString = new URLSearchParams({
 		apikey: APIKey,
@@ -93,4 +93,4 @@ export {
 	getLocationFromLatLon,
 	fetchLatestForecast,
 	fetchCurrentWeather
-}
+};

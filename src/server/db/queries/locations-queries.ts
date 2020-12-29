@@ -31,18 +31,18 @@ async function insertLocations(locations: Location[]) {
 					updatedAt: knex.raw('CURRENT_TIMESTAMP')
 				});
 
-				updatedLocations.push(matchingLocation);
+			updatedLocations.push(matchingLocation);
 		} else {
 			const newLocation = {
 				...location,
 				id: nanoid()
 			};
-			await knex('locations').insert(newLocation)
+			await knex('locations').insert(newLocation);
 			updatedLocations.push(newLocation);
 		}
 	}
 
-	return updatedLocations
+	return updatedLocations;
 }
 
 async function getLocation(locationID: string) {

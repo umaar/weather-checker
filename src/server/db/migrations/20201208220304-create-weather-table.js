@@ -13,7 +13,7 @@ export function up(knex) {
 			.references('id')
 			.inTable('locations')
 			.onUpdate('CASCADE')
-			.onDelete('CASCADE') // if referenced Location is deleted, delete this weather entry
+			.onDelete('CASCADE'); // If referenced Location is deleted, delete this weather entry
 
 		table.timestamp('updatedAt').defaultTo(knex.fn.now()).notNullable();
 		table.timestamp('createdAt').defaultTo(knex.fn.now()).notNullable();

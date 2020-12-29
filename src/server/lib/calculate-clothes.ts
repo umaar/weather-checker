@@ -1,9 +1,9 @@
 const clothesIdentifiers = Object.freeze({
-	'cap': 'Cap',
-	'hat': 'Hap',
+	cap: 'Cap',
+	hat: 'Hap',
 	'shoe-covers': 'Shoe covers',
 	'winter-gloves': 'Winter gloves',
-	'jacket': 'Jacket',
+	jacket: 'Jacket',
 	'thick-long-sleeved-jersey': 'Thick long sleeved jersey',
 	'long-sleeve-base-layer': 'Long sleeve base layer',
 	'bib-tights': 'Bib tights',
@@ -24,7 +24,7 @@ interface Temperatures {
 interface ClothesTemperatureRange {
 	temperatures: Temperatures;
 	clothesIDs: Array<keyof typeof clothesIdentifiers>;
-};
+}
 
 const clothesMapping: ClothesTemperatureRange[] = [{
 	temperatures: {
@@ -32,8 +32,8 @@ const clothesMapping: ClothesTemperatureRange[] = [{
 		to: Infinity
 	},
 	clothesIDs: [
-		"bib-shorts",
-		"thin-short-sleeved-jersey"
+		'bib-shorts',
+		'thin-short-sleeved-jersey'
 	]
 }, {
 	temperatures: {
@@ -41,8 +41,8 @@ const clothesMapping: ClothesTemperatureRange[] = [{
 		to: 16
 	},
 	clothesIDs: [
-		"bib-shorts",
-		"thick-short-sleeved-jersey"
+		'bib-shorts',
+		'thick-short-sleeved-jersey'
 	]
 }, {
 	temperatures: {
@@ -50,8 +50,8 @@ const clothesMapping: ClothesTemperatureRange[] = [{
 		to: 14
 	},
 	clothesIDs: [
-		"bib-shorts",
-		"thin-long-sleeved-jersey"
+		'bib-shorts',
+		'thin-long-sleeved-jersey'
 	]
 }, {
 	temperatures: {
@@ -59,10 +59,10 @@ const clothesMapping: ClothesTemperatureRange[] = [{
 		to: 12
 	},
 	clothesIDs: [
-		"short-sleeved-base-layer",
-		"bib-shorts",
-		"thin-long-sleeved-jersey",
-		"mid-weight-gloves"
+		'short-sleeved-base-layer',
+		'bib-shorts',
+		'thin-long-sleeved-jersey',
+		'mid-weight-gloves'
 	]
 }, {
 	temperatures: {
@@ -70,10 +70,10 @@ const clothesMapping: ClothesTemperatureRange[] = [{
 		to: 9
 	},
 	clothesIDs: [
-		"short-sleeved-base-layer",
-		"bib-shorts-leg-warmers",
-		"thick-long-sleeved-jersey",
-		"mid-weight-gloves"
+		'short-sleeved-base-layer',
+		'bib-shorts-leg-warmers',
+		'thick-long-sleeved-jersey',
+		'mid-weight-gloves'
 	]
 }, {
 	temperatures: {
@@ -81,10 +81,10 @@ const clothesMapping: ClothesTemperatureRange[] = [{
 		to: 7
 	},
 	clothesIDs: [
-		"long-sleeve-base-layer",
-		"bib-tights",
-		"thick-long-sleeved-jersey",
-		"winter-gloves"
+		'long-sleeve-base-layer',
+		'bib-tights',
+		'thick-long-sleeved-jersey',
+		'winter-gloves'
 	]
 }, {
 	temperatures: {
@@ -92,11 +92,11 @@ const clothesMapping: ClothesTemperatureRange[] = [{
 		to: 5
 	},
 	clothesIDs: [
-		"long-sleeve-base-layer",
-		"bib-tights",
-		"thick-long-sleeved-jersey",
-		"winter-gloves",
-		"cap"
+		'long-sleeve-base-layer',
+		'bib-tights',
+		'thick-long-sleeved-jersey',
+		'winter-gloves',
+		'cap'
 	]
 }, {
 	temperatures: {
@@ -104,16 +104,15 @@ const clothesMapping: ClothesTemperatureRange[] = [{
 		to: 3
 	},
 	clothesIDs: [
-		"long-sleeve-base-layer",
-		"bib-tights",
-		"thick-long-sleeved-jersey",
-		"jacket",
-		"winter-gloves",
-		"shoe-covers",
-		"hat"
+		'long-sleeve-base-layer',
+		'bib-tights',
+		'thick-long-sleeved-jersey',
+		'jacket',
+		'winter-gloves',
+		'shoe-covers',
+		'hat'
 	]
 }];
-
 
 function calculateClothes(currentTemperature: number) {
 	currentTemperature = Math.round(currentTemperature);
@@ -123,20 +122,21 @@ function calculateClothes(currentTemperature: number) {
 		temperatures
 	}: any = clothesMapping.find(({temperatures}) => {
 		const isInRange =
-			currentTemperature >= temperatures.from 
-			&& currentTemperature <= temperatures.to;
-		
+			currentTemperature >= temperatures.from &&
+			currentTemperature <= temperatures.to;
+
 		return isInRange;
 	});
-	
+
 	const individualItems = clothesIDs.map((clothesID: any) => {
-		return [clothesID, (clothesIdentifiers as any)[clothesID]]
+		return [clothesID, (clothesIdentifiers as any)[clothesID]];
 	});
 
 	return {
 		individualItems,
+		// .webp performs better, however .png is needed for old ios safari
 		mainImage: `outfit-${temperatures.from}-${temperatures.to}.png`
-	}
+	};
 }
 
 export default calculateClothes;
