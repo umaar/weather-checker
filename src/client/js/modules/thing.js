@@ -14,6 +14,8 @@ function hello() {
 		return;
 	}
 
+	form.querySelector('.form-search-options').hidden = true;
+
 	const button = document.createElement('button');
 	button.textContent = 'Use current location';
 	form.append(button);
