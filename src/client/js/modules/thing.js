@@ -1,4 +1,5 @@
 /* global window, document */
+import log from './log.js';
 
 function getCurrentLocation() {
 	return new Promise((resolve, reject) => {
@@ -25,15 +26,22 @@ function hello() {
 		button.disabled = true;
 		button.textContent = 'Please wait';
 		document.querySelector('#coordinates').click();
+
+		let location;
+
 		try {
-			const {latitude, longitude} = await getCurrentLocation();
-			document.querySelector('#query').value = `${latitude},${longitude}`;
-			form.querySelector('[type="submit"]').click();
+			location = await getCurrentLocation();
 		} catch (error) {
-			console.log('Error getting location', error);
+			log(error);
 			button.disabled = false;
 			button.textContent = 'Use current location';
+			document.querySelector('#location').click();
+			return;
 		}
+
+		const {latitude, longitude} = location;
+		document.querySelector('#query').value = `${latitude},${longitude}`;
+		form.querySelector('[type="submit"]').click();
 	});
 }
 

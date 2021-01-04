@@ -8,3 +8,13 @@ $primary-green: #27c188;
 @import 'components/component';
 @import 'pages/home';
 @import 'pages/resolve-location';
+
+#log:empty {
+	display: none
+}
+
+#log {
+	outline: 1px solid black;
+	padding: 10px;
+	margin-bottom: 10px;
+}

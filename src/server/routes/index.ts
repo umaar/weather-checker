@@ -1,6 +1,7 @@
 import express from 'express';
 import homePage from './home-page.js';
 import resolveLocation from './resolve-location.js';
+import logHandler from './log-handler.js';
 /* eslint-disable new-cap */
 const router = express.Router();
 /* eslint-enable new-cap */
@@ -21,5 +22,6 @@ export function wrapHandler(asyncFunction: AsyncFunction) {
 
 router.get('/resolve-location', wrapHandler(resolveLocation));
 router.get('/', wrapHandler(homePage));
+router.post('/log', logHandler);
 
 export default router;
