@@ -3,6 +3,7 @@ window.addEventListener('error', (message_, url, lineNo, columnNo, error) => {
 	if (typeof message_ !== 'string') {
 		message_ = message_.message;
 	}
+
 	const string = message_.toLowerCase();
 	const substring = 'script error';
 	if (string.includes(substring)) {

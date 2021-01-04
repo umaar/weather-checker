@@ -56,7 +56,7 @@ async function homePage(request: express.Request, response: express.Response) {
 			selectedTime
 		}) : fullWeatherInfo?.current;
 
-		const shouldUpdateCurrentWeather = forceReload ?? !weather ?? !isWeatherFresh(weatherUpdatedAt);
+		const shouldUpdateCurrentWeather = forceReload || !weather || !(isWeatherFresh(weatherUpdatedAt));
 
 		if (shouldUpdateCurrentWeather) {
 			console.log('Weather is stale, fetching new...');
