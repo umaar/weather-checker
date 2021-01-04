@@ -32,7 +32,7 @@ function hello() {
 		try {
 			location = await getCurrentLocation();
 		} catch (error) {
-			log(error);
+			log(error.message || error);
 			button.disabled = false;
 			button.textContent = 'Use current location';
 			document.querySelector('#location').click();
