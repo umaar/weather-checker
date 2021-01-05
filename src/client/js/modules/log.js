@@ -28,7 +28,7 @@ window.addEventListener('error', (message_, url, lineNo, columnNo, error) => {
 
 function log(message) {
 	console.log(message);
-	document.querySelector('#log').textContent += '\n' + message;
+	document.querySelector('#log').textContent += '\n\n' + message;
 	fetch(`${window.location.href}/log`, {
 		method: 'POST',
 		headers: {

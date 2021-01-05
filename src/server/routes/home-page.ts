@@ -18,12 +18,11 @@ async function homePage(request: express.Request, response: express.Response) {
 	const locationID = request.query.location ? String(request.query.location) : '';
 	const locationInfo = await locationsQueries.getLocation(locationID);
 
-	if (locationID) {
-		if (!locationInfo) {
-			const redirectTo = getBaseURL(request);
-			console.log('redirecting to:', redirectTo);
-			return response.redirect(redirectTo);
-		}
+	if (locationID && !locationInfo) {
+		const redirectTo = getBaseURL(request);
+		console.log('redirecting to:', redirectTo);
+		response.redirect(redirectTo);
+		return;
 	}
 
 	const parsedSelectedTime = Number.parseInt(String(request.query['selected-time']), 10);
@@ -36,8 +35,10 @@ async function homePage(request: express.Request, response: express.Response) {
 			request,
 			queryStringParams: ['selected-time']
 		});
+
 		console.log('redirecting to:', redirectURL);
-		return response.redirect(redirectURL);
+		response.redirect(redirectURL);
+		return;
 	}
 
 	const forceReload = request.query['force-reload'];
@@ -77,7 +78,8 @@ async function homePage(request: express.Request, response: express.Response) {
 					queryStringParams: ['force-reload']
 				});
 
-				return response.redirect(redirectURL);
+				response.redirect(redirectURL);
+				return;
 			}
 		}
 	}

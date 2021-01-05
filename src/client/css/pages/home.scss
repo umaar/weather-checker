@@ -45,7 +45,6 @@ header {
     border-bottom: 1px solid rgba(255, 255, 255, 0.6);
 
     display: flex;
-    align-items: start;
     justify-content: space-between;
 
     img {
@@ -71,12 +70,19 @@ header {
 }
 
 .weather-metadata {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .weather-metadata p {
-    margin-top: 2px;
-    margin-bottom: 2px;
+    margin: 0;
+    padding-bottom: 5px;
     font-size: 13px;
+}
+
+.weather-metadata p:last-child {
+    padding-bottom: 0;
 }
 
 .refresh-message {

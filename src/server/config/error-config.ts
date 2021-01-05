@@ -21,7 +21,8 @@ function init(app: express.Application) {
 		console.log('Express error handler:', error);
 
 		if (response.headersSent) {
-			return next(error);
+			next(error);
+			return;
 		}
 
 		response.status(500).render('error', {

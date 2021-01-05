@@ -43,6 +43,12 @@ function hello() {
 		document.querySelector('#query').value = `${latitude},${longitude}`;
 		form.querySelector('[type="submit"]').click();
 	});
+
+	// If there's no existing weather on the page
+	// jump straight querying for the current location
+	if (!document.querySelector('.clothes-container')) {
+		button.click();
+	}
 }
 
 export default hello;

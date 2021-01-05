@@ -1,8 +1,6 @@
-import {Template} from 'nunjucks';
-
 const clothesIdentifiers = Object.freeze({
 	cap: 'Cap',
-	hat: 'Hap',
+	hat: 'Hat',
 	'shoe-covers': 'Shoe covers',
 	'winter-gloves': 'Winter gloves',
 	jacket: 'Jacket',
@@ -31,7 +29,7 @@ interface ClothesTemperatureRange {
 const clothesMapping: ClothesTemperatureRange[] = [{
 	temperatures: {
 		from: 17,
-		to: Infinity
+		to: Number.POSITIVE_INFINITY
 	},
 	clothesIDs: [
 		'bib-shorts',
@@ -102,7 +100,7 @@ const clothesMapping: ClothesTemperatureRange[] = [{
 	]
 }, {
 	temperatures: {
-		from: -Infinity,
+		from: Number.NEGATIVE_INFINITY,
 		to: 3
 	},
 	clothesIDs: [
