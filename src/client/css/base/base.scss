@@ -82,8 +82,7 @@ a {
 	@include container;
 }
 
-input[type="submit"],
-button[type="submit"] {
+form button {
 	font-size: 15px;
 	padding: 10px;
 	cursor: pointer;

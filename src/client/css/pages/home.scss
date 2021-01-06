@@ -2,9 +2,11 @@ h1 {
 	
 }
 
-button[type="submit"] {
-    padding: 5px;
+form button {
+    padding: 5px 10px;
     margin-top: 10px;
+    margin-right: 10px;
+    font-size: 14px;
 }
 
 fieldset {
