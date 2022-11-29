@@ -1,24 +1,21 @@
-import weatherQueries from '../db/queries/weather-queries.js';
+import weatherQueries from "../db/queries/weather-queries.js";
 
-import {
-	fetchCurrentWeather,
-	fetchLatestForecast
-} from './api.js';
+import { fetchCurrentWeather, fetchLatestForecast } from "./api.js";
 
 async function fetchAndSaveCurrentWeather({
 	locationID,
-	locationKey
+	locationKey,
 }: {
 	locationID: string;
 	locationKey: string;
 }) {
-	const currentWeather = await fetchCurrentWeather(locationKey);
-	const latestForecast = await fetchLatestForecast(locationKey);
+	const currentWeather: any = await fetchCurrentWeather(locationKey);
+	const latestForecast: any = await fetchLatestForecast(locationKey);
 
 	return weatherQueries.insertOrUpdateWeather({
 		locationID,
 		weather: currentWeather,
-		forecast: latestForecast
+		forecast: latestForecast,
 	});
 }
 

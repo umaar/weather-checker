@@ -1,27 +1,27 @@
-import fetch from 'node-fetch';
-import config from 'config';
+import fetch from "node-fetch";
+import config from "config";
 // Import {URLSearchParams} from 'url';
 
-import locationsQueries from '../db/queries/locations-queries.js';
+import locationsQueries from "../db/queries/locations-queries.js";
 
-const baseAPIURL: string = config.get('baseAPIURL');
+const baseAPIURL: string = config.get("baseAPIURL");
 
-const APIKey: string = config.get('ACCU_WEATHER_API_KEY');
+const APIKey: string = config.get("ACCU_WEATHER_API_KEY");
 
 async function fetchJSON({
 	url,
-	params
+	params,
 }: {
 	url: string;
 	params: Record<string, string>;
 }) {
 	const queryString = new URLSearchParams({
 		apikey: APIKey,
-		...params
+		...params,
 	});
 
 	const URLToFetch = `${baseAPIURL}${url}?${queryString.toString()}`;
-	console.log('Fetching:', URLToFetch);
+	console.log("Fetching:", URLToFetch);
 
 	const response = await fetch(URLToFetch);
 
@@ -30,15 +30,17 @@ async function fetchJSON({
 	}
 
 	const jsonResponse = JSON.stringify(await response.json());
-	throw new Error(`API Error. Received a '${response.status}' status code. ${jsonResponse}`);
+	throw new Error(
+		`API Error. Received a '${response.status}' status code. ${jsonResponse}`
+	);
 }
 
 async function searchForLocation(query: string) {
-	const results = await fetchJSON({
-		url: '/locations/v1/cities/autocomplete',
+	const results: any = await fetchJSON({
+		url: "/locations/v1/cities/autocomplete",
 		params: {
-			q: query
-		}
+			q: query,
+		},
 	});
 
 	const formattedResults = results.map((result: any) => {
@@ -46,7 +48,7 @@ async function searchForLocation(query: string) {
 			name: result.LocalizedName,
 			area: result.AdministrativeArea.LocalizedName,
 			country: result.Country.LocalizedName,
-			locationKey: result.Key
+			locationKey: result.Key,
 		};
 	});
 
@@ -57,8 +59,8 @@ async function fetchCurrentWeather(locationKey: string) {
 	return fetchJSON({
 		url: `/currentconditions/v1/${locationKey}`,
 		params: {
-			details: String(true)
-		}
+			details: String(true),
+		},
 	});
 }
 
@@ -67,31 +69,33 @@ async function fetchLatestForecast(locationKey: string) {
 		url: `/forecasts/v1/hourly/12hour/${locationKey}`, // /forecasts/v1/hourly/12hour/${locationKey}
 		params: {
 			details: String(true),
-			metric: String(true)
-		}
+			metric: String(true),
+		},
 	});
 }
 
 async function getLocationFromLatLon(query: string) {
-	const result = await fetchJSON({
-		url: '/locations/v1/cities/geoposition/search', // /locations/v1/cities/geoposition/search
+	const result: any = await fetchJSON({
+		url: "/locations/v1/cities/geoposition/search", // /locations/v1/cities/geoposition/search
 		params: {
 			q: query,
-			details: String(true)
-		}
+			details: String(true),
+		},
 	});
 
-	return locationsQueries.insertLocations([{
-		name: result.LocalizedName,
-		area: result.AdministrativeArea.LocalizedName,
-		country: result.Country.LocalizedName,
-		locationKey: result.Key
-	}]);
+	return locationsQueries.insertLocations([
+		{
+			name: result.LocalizedName,
+			area: result.AdministrativeArea.LocalizedName,
+			country: result.Country.LocalizedName,
+			locationKey: result.Key,
+		},
+	]);
 }
 
 export {
 	searchForLocation,
 	getLocationFromLatLon,
 	fetchLatestForecast,
-	fetchCurrentWeather
+	fetchCurrentWeather,
 };

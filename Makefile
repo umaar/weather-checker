@@ -4,7 +4,7 @@ ENV ?= development
 .DEFAULT_GOAL := start
 
 install:
-	npm install
+	npm install --legacy-peer-deps
 
 update-deps:
 	ncu -u
@@ -17,10 +17,10 @@ seed:
 	NODE_ENV=$(ENV) ./node_modules/.bin/knex --esm seed:run --knexfile knexfile.mjs
 
 start:
-	NODE_ENV=$(ENV) ./node_modules/gulp/bin/gulp.js -f gulpfile.cjs
+	NODE_ENV=$(ENV) ./node_modules/gulp/bin/gulp.js
 
 build-assets:
-	./node_modules/gulp/bin/gulp.js -f gulpfile.cjs build
+	./node_modules/gulp/bin/gulp.js build
 
 clean-dist:
 	rm -rf dist
