@@ -33,6 +33,3 @@ stop:
 
 run:
 	NODE_ENV=$(ENV) NODE_CONFIG_STRICT_MODE=0 pm2 start 'node ./dist/server/server.js' --name weather-checker-$(ENV) --time
-
-test:
-	./node_modules/.bin/xo
